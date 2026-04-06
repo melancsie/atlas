@@ -5,737 +5,167 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Inner Atlas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #0C0A08;
-    --bg-surface: #131109;
-    --bg-card: #1B1812;
-    --bg-card-hover: #201D16;
-    --text-primary: #EDE4D4;
-    --text-secondary: #9A8E7E;
-    --text-tertiary: #5A5248;
-    --accent: #C4924A;
-    --accent-light: #D9AA6A;
-    --accent-soft: rgba(196, 146, 74, 0.12);
-    --accent-border: rgba(196, 146, 74, 0.25);
-    --border: rgba(237, 228, 212, 0.07);
-    --border-med: rgba(237, 228, 212, 0.12);
-    --red: #C45A4A;
-    --teal: #4A8C80;
-    --purple: #7A6AAA;
-    --rose: #B87070;
+    --bg: #0C0A08; --bg-surface: #131109; --bg-card: #1B1812; --bg-card-hover: #201D16;
+    --text-primary: #EDE4D4; --text-secondary: #9A8E7E; --text-tertiary: #5A5248;
+    --accent: #C4924A; --accent-light: #D9AA6A; --accent-soft: rgba(196,146,74,0.12); --accent-border: rgba(196,146,74,0.25);
+    --border: rgba(237,228,212,0.07); --border-med: rgba(237,228,212,0.12);
+    --red: #C45A4A; --teal: #4A8C80; --purple: #7A6AAA; --rose: #B87070;
     --sidebar-w: 230px;
   }
-
   html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text-primary);
-    font-family: 'Crimson Pro', Georgia, serif;
-    font-size: 17px;
-    line-height: 1.75;
-    min-height: 100vh;
-  }
-
-  /* GRID BACKGROUND */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(196,146,74,0.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(196,146,74,0.025) 1px, transparent 1px);
-    background-size: 60px 60px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* SIDEBAR */
-  .sidebar {
-    position: fixed;
-    top: 0; left: 0;
-    width: var(--sidebar-w);
-    height: 100vh;
-    background: var(--bg-surface);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    padding: 2rem 1.5rem;
-    z-index: 100;
-    overflow-y: auto;
-  }
-
-  .sidebar-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 0.25rem;
-  }
-
-  .sidebar-sub {
-    font-size: 11px;
-    color: var(--text-tertiary);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 2.5rem;
-    font-family: 'Crimson Pro', serif;
-  }
-
+  body { background: var(--bg); color: var(--text-primary); font-family: 'Crimson Pro', Georgia, serif; font-size: 17px; line-height: 1.75; min-height: 100vh; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(196,146,74,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(196,146,74,0.025) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 0; }
+  .sidebar { position: fixed; top: 0; left: 0; width: var(--sidebar-w); height: 100vh; background: var(--bg-surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; padding: 2rem 1.5rem; z-index: 100; overflow-y: auto; }
+  .sidebar-logo { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.25rem; }
+  .sidebar-sub { font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2.5rem; }
   .nav-group { margin-bottom: 1.75rem; }
-
-  .nav-group-label {
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--text-tertiary);
-    margin-bottom: 0.6rem;
-    font-family: 'Crimson Pro', serif;
-  }
-
-  .nav-link {
-    display: block;
-    font-size: 13px;
-    color: var(--text-secondary);
-    text-decoration: none;
-    padding: 5px 8px;
-    border-radius: 4px;
-    margin-bottom: 2px;
-    transition: all 0.2s;
-    letter-spacing: 0.01em;
-    border-left: 2px solid transparent;
-  }
-
-  .nav-link:hover {
-    color: var(--text-primary);
-    background: var(--accent-soft);
-    border-left-color: var(--accent);
-  }
-
-  .nav-link.active {
-    color: var(--accent-light);
-    border-left-color: var(--accent);
-    background: var(--accent-soft);
-  }
-
-  .sidebar-footer {
-    margin-top: auto;
-    font-size: 11px;
-    color: var(--text-tertiary);
-    line-height: 1.5;
-  }
-
-  /* MAIN */
-  .main {
-    margin-left: var(--sidebar-w);
-    position: relative;
-    z-index: 1;
-  }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 6rem 5rem;
-    position: relative;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .hero-eyebrow {
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 2rem;
-    font-family: 'Crimson Pro', serif;
-  }
-
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(64px, 8vw, 110px);
-    font-weight: 300;
-    line-height: 0.95;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
-  }
-
-  .hero-title em {
-    font-style: italic;
-    color: var(--accent-light);
-  }
-
-  .hero-desc {
-    font-size: 18px;
-    color: var(--text-secondary);
-    max-width: 520px;
-    margin-top: 2rem;
-    line-height: 1.7;
-    font-weight: 300;
-  }
-
-  .hero-meta {
-    margin-top: 3rem;
-    display: flex;
-    gap: 2.5rem;
-  }
-
-  .hero-stat { }
-  .hero-stat-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 32px;
-    font-weight: 300;
-    color: var(--accent);
-    line-height: 1;
-  }
-  .hero-stat-label {
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-tertiary);
-    margin-top: 4px;
-  }
-
-  .hero-ornament {
-    position: absolute;
-    right: 5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 280px;
-    height: 280px;
-    border: 1px solid var(--accent-border);
-    border-radius: 50%;
-    opacity: 0.4;
-  }
-
-  .hero-ornament::before {
-    content: '';
-    position: absolute;
-    inset: 20px;
-    border: 1px solid var(--accent-border);
-    border-radius: 50%;
-  }
-
-  .hero-ornament::after {
-    content: '';
-    position: absolute;
-    inset: 40px;
-    border: 1px solid var(--accent-border);
-    border-radius: 50%;
-  }
-
-  /* SECTIONS */
-  .section {
-    padding: 5rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-  }
-
-  .section-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    color: var(--accent);
-    letter-spacing: 0.1em;
-    font-weight: 400;
-    flex-shrink: 0;
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 36px;
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    line-height: 1.1;
-    color: var(--text-primary);
-  }
-
+  .nav-group-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 0.6rem; }
+  .nav-link { display: block; font-size: 13px; color: var(--text-secondary); text-decoration: none; padding: 5px 8px; border-radius: 4px; margin-bottom: 2px; transition: all 0.2s; border-left: 2px solid transparent; }
+  .nav-link:hover { color: var(--text-primary); background: var(--accent-soft); border-left-color: var(--accent); }
+  .nav-link.active { color: var(--accent-light); border-left-color: var(--accent); background: var(--accent-soft); }
+  .sidebar-footer { margin-top: auto; font-size: 11px; color: var(--text-tertiary); line-height: 1.5; }
+  .main { margin-left: var(--sidebar-w); position: relative; z-index: 1; }
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 6rem 5rem; position: relative; border-bottom: 1px solid var(--border); }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 2rem; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(64px, 8vw, 110px); font-weight: 300; line-height: 0.95; letter-spacing: -0.02em; }
+  .hero-title em { font-style: italic; color: var(--accent-light); }
+  .hero-desc { font-size: 18px; color: var(--text-secondary); max-width: 520px; margin-top: 2rem; line-height: 1.7; font-weight: 300; }
+  .hero-meta { margin-top: 3rem; display: flex; gap: 2.5rem; }
+  .hero-stat-num { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--accent); line-height: 1; }
+  .hero-stat-label { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); margin-top: 4px; }
+  .hero-ornament { position: absolute; right: 5rem; top: 50%; transform: translateY(-50%); width: 280px; height: 280px; border: 1px solid var(--accent-border); border-radius: 50%; opacity: 0.4; }
+  .hero-ornament::before { content: ''; position: absolute; inset: 20px; border: 1px solid var(--accent-border); border-radius: 50%; }
+  .hero-ornament::after { content: ''; position: absolute; inset: 40px; border: 1px solid var(--accent-border); border-radius: 50%; }
+  .section { padding: 5rem; border-bottom: 1px solid var(--border); }
+  .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 3rem; }
+  .section-num { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--accent); letter-spacing: 0.1em; flex-shrink: 0; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 36px; font-weight: 400; letter-spacing: -0.01em; line-height: 1.1; }
   .section-title em { font-style: italic; color: var(--accent-light); }
-
-  .section-rule {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* CARDS */
-  .card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.75rem 2rem;
-    transition: border-color 0.2s, background 0.2s;
-  }
-
+  .section-rule { flex: 1; height: 1px; background: var(--border); }
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.75rem 2rem; transition: border-color 0.2s, background 0.2s; }
   .card:hover { border-color: var(--border-med); background: var(--bg-card-hover); }
-
-  .card-label {
-    font-size: 10px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 1rem;
-    font-family: 'Crimson Pro', serif;
-  }
-
+  .card-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
   .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.25rem; }
-  .grid-auto { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
-
-  /* BIG 5 BARS */
   .b5-row { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
-  .b5-label { font-size: 13px; color: var(--text-secondary); width: 160px; flex-shrink: 0; letter-spacing: 0.03em; }
+  .b5-label { font-size: 13px; color: var(--text-secondary); width: 160px; flex-shrink: 0; }
   .b5-track { flex: 1; height: 4px; background: rgba(237,228,212,0.08); border-radius: 2px; }
-  .b5-fill { height: 4px; border-radius: 2px; transition: width 1s ease; }
-  .b5-score { font-size: 12px; color: var(--text-tertiary); width: 40px; text-align: right; font-family: 'Cormorant Garamond', serif; flex-shrink: 0; }
-
-  /* MBTI */
-  .mbti-type {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 72px;
-    font-weight: 300;
-    color: var(--text-primary);
-    letter-spacing: 0.12em;
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-
-  .mbti-name {
-    font-size: 14px;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
-  }
-
+  .b5-fill { height: 4px; border-radius: 2px; }
+  .b5-score { font-size: 12px; width: 40px; text-align: right; font-family: 'Cormorant Garamond', serif; flex-shrink: 0; color: var(--text-tertiary); }
+  .mbti-type { font-family: 'Cormorant Garamond', serif; font-size: 72px; font-weight: 300; letter-spacing: 0.12em; line-height: 1; margin-bottom: 0.5rem; }
+  .mbti-name { font-size: 14px; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1.5rem; }
   .mbti-axes { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.5rem; }
-  .mbti-axis-card {
-    background: rgba(196,146,74,0.06);
-    border: 1px solid var(--accent-border);
-    border-radius: 6px;
-    padding: 10px 14px;
-  }
+  .mbti-axis-card { background: rgba(196,146,74,0.06); border: 1px solid var(--accent-border); border-radius: 6px; padding: 10px 14px; }
   .mbti-axis-key { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 2px; }
-  .mbti-axis-val { font-size: 15px; color: var(--text-primary); font-weight: 600; }
+  .mbti-axis-val { font-size: 15px; font-weight: 600; }
   .mbti-axis-note { font-size: 12px; color: var(--text-secondary); margin-top: 3px; line-height: 1.4; }
-
-  /* ASTROLOGY */
-  .astro-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-  .astro-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.5rem;
-    text-align: center;
-    transition: all 0.2s;
-  }
-  .astro-card:hover { border-color: var(--accent-border); }
-  .astro-symbol { font-size: 36px; margin-bottom: 0.5rem; line-height: 1; }
-  .astro-placement { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 4px; }
-  .astro-sign { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; color: var(--accent-light); margin-bottom: 8px; }
-  .astro-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-
-  /* TAGS */
+  .planet-table { width: 100%; border-collapse: collapse; }
+  .planet-table th { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); text-align: left; padding: 0 1rem 1rem 0; font-weight: 400; border-bottom: 1px solid var(--border); }
+  .planet-table td { font-size: 14px; color: var(--text-secondary); padding: 0.9rem 1rem 0.9rem 0; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.55; }
+  .planet-table tr:last-child td { border-bottom: none; }
+  .house-badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); border: 1px solid var(--accent-border); letter-spacing: 0.04em; }
+  .stellium-banner { background: rgba(196,146,74,0.08); border: 1px solid var(--accent-border); border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem; }
+  .finding { padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; margin-bottom: 1rem; }
+  .finding-label { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .finding-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; margin-bottom: 8px; }
+  .finding-body { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+  .finding-rose { border-left-color: var(--rose); } .finding-rose .finding-label { color: var(--rose); }
+  .finding-purple { border-left-color: var(--purple); } .finding-purple .finding-label { color: var(--purple); }
+  .finding-teal { border-left-color: var(--teal); } .finding-teal .finding-label { color: var(--teal); }
   .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag {
-    display: inline-block;
-    font-size: 12px;
-    padding: 4px 12px;
-    border-radius: 20px;
-    letter-spacing: 0.02em;
-    line-height: 1.4;
-  }
+  .tag { display: inline-block; font-size: 12px; padding: 4px 12px; border-radius: 20px; }
   .tag-purple { background: rgba(122,106,170,0.15); color: #A99FCC; border: 1px solid rgba(122,106,170,0.3); }
   .tag-teal { background: rgba(74,140,128,0.15); color: #7ABDB5; border: 1px solid rgba(74,140,128,0.3); }
-  .tag-rose { background: rgba(184,112,112,0.15); color: #D4A0A0; border: 1px solid rgba(184,112,112,0.3); }
-  .tag-amber { background: rgba(196,146,74,0.12); color: var(--accent-light); border: 1px solid var(--accent-border); }
-
-  /* TENSION */
-  .tension-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--border);
-  }
+  .tension-item { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 0; border-bottom: 1px solid var(--border); }
   .tension-item:last-child { border-bottom: none; }
   .tension-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-  .tension-pole { font-size: 15px; color: var(--text-primary); font-style: italic; font-family: 'Cormorant Garamond', serif; }
-  .tension-vs { font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.1em; flex-shrink: 0; padding: 0 6px; }
-
-  /* STATE CARDS */
-  .state-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.75rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .state-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px;
-    height: 100%;
-    border-radius: 3px 0 0 3px;
-  }
-  .state-a::before { background: var(--accent); }
-  .state-b::before { background: var(--purple); }
-  .state-c::before { background: var(--teal); }
-  .state-d::before { background: var(--rose); }
+  .tension-pole { font-size: 15px; font-style: italic; font-family: 'Cormorant Garamond', serif; }
+  .tension-vs { font-size: 11px; color: var(--text-tertiary); flex-shrink: 0; padding: 0 6px; }
+  .state-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.75rem; position: relative; overflow: hidden; }
+  .state-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; }
+  .state-a::before { background: var(--accent); } .state-b::before { background: var(--purple); }
+  .state-c::before { background: var(--teal); } .state-d::before { background: var(--rose); }
   .state-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; margin-bottom: 0.25rem; }
   .state-weather { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 1rem; }
   .state-body { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
-  .state-triggers { margin-top: 1rem; font-size: 12px; color: var(--text-tertiary); }
-
-  /* TRIGGER TABLE */
   .trigger-table { width: 100%; border-collapse: collapse; }
-  .trigger-table th {
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--text-tertiary);
-    text-align: left;
-    padding: 0 1rem 1rem 0;
-    font-family: 'Crimson Pro', serif;
-    font-weight: 400;
-    border-bottom: 1px solid var(--border);
-  }
-  .trigger-table td {
-    font-size: 14px;
-    color: var(--text-secondary);
-    padding: 1rem 1rem 1rem 0;
-    border-bottom: 1px solid var(--border);
-    vertical-align: top;
-    line-height: 1.5;
-  }
+  .trigger-table th { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); text-align: left; padding: 0 1rem 1rem 0; font-weight: 400; border-bottom: 1px solid var(--border); }
+  .trigger-table td { font-size: 14px; color: var(--text-secondary); padding: 1rem 1rem 1rem 0; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.5; }
   .trigger-table tr:last-child td { border-bottom: none; }
-  .trigger-stimulus { color: var(--text-primary); font-size: 14px; }
-  .response-badge {
-    display: inline-block;
-    font-size: 11px;
-    padding: 2px 10px;
-    border-radius: 12px;
-    letter-spacing: 0.05em;
-  }
+  .response-badge { display: inline-block; font-size: 11px; padding: 2px 10px; border-radius: 12px; }
   .r-withdraw { background: rgba(122,106,170,0.15); color: #A99FCC; }
   .r-spiral { background: rgba(196,74,74,0.15); color: #D4A0A0; }
   .r-mask { background: rgba(74,140,128,0.15); color: #7ABDB5; }
-  .r-freeze { background: rgba(196,146,74,0.12); color: var(--accent-light); }
-
-  /* ENERGY LEDGER */
-  .ledger-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-  }
-  .ledger-col-head {
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    margin-bottom: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .drain-head { color: var(--rose); }
-  .charge-head { color: var(--teal); }
-  .ledger-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 12px;
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.5;
-  }
+  .r-activate { background: rgba(196,146,74,0.12); color: var(--accent-light); }
+  .ledger-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+  .ledger-col-head { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border); }
+  .ledger-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 12px; font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
   .ledger-dot { width: 5px; height: 5px; border-radius: 50%; margin-top: 7px; flex-shrink: 0; }
-  .dot-drain { background: var(--rose); }
-  .dot-charge { background: var(--teal); }
-
-  /* UNKNOWN */
-  .unknown-item {
-    padding: 1.25rem 0;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-  }
+  .unknown-item { padding: 1.25rem 0; border-bottom: 1px solid var(--border); display: flex; gap: 1rem; align-items: flex-start; }
   .unknown-item:last-child { border-bottom: none; }
-  .unknown-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px;
-    color: var(--accent);
-    flex-shrink: 0;
-    width: 24px;
-    margin-top: 2px;
-  }
-  .unknown-q { font-size: 16px; color: var(--text-primary); font-style: italic; font-family: 'Cormorant Garamond', serif; }
-
-  /* INSIGHT INBOX */
-  .insight-input-area {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-    transition: border-color 0.2s;
-  }
+  .unknown-num { font-family: 'Cormorant Garamond', serif; font-size: 13px; color: var(--accent); flex-shrink: 0; width: 24px; margin-top: 2px; }
+  .unknown-q { font-size: 16px; font-style: italic; font-family: 'Cormorant Garamond', serif; }
+  .wound-item { padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-left: 3px solid var(--rose); border-radius: 0 8px 8px 0; margin-bottom: 1rem; }
+  .wound-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rose); margin-bottom: 0.5rem; opacity: 0.8; }
+  .wound-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; margin-bottom: 0.5rem; }
+  .wound-body { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+  .atlas-quote { border-left: 2px solid var(--accent-border); padding: 1rem 1.5rem; margin: 2rem 0; font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: var(--text-secondary); line-height: 1.6; }
+  .insight-input-area { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; transition: border-color 0.2s; }
   .insight-input-area:focus-within { border-color: var(--accent-border); }
-
-  .insight-textarea {
-    width: 100%;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--text-primary);
-    font-family: 'Crimson Pro', serif;
-    font-size: 16px;
-    line-height: 1.7;
-    resize: none;
-    min-height: 80px;
-  }
-
+  .insight-textarea { width: 100%; background: transparent; border: none; outline: none; color: var(--text-primary); font-family: 'Crimson Pro', serif; font-size: 16px; line-height: 1.7; resize: none; min-height: 80px; }
   .insight-textarea::placeholder { color: var(--text-tertiary); font-style: italic; }
-
-  .insight-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-  }
-
+  .insight-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border); }
   .insight-hint { font-size: 12px; color: var(--text-tertiary); }
-
-  .btn {
-    background: var(--accent-soft);
-    border: 1px solid var(--accent-border);
-    color: var(--accent-light);
-    font-family: 'Crimson Pro', serif;
-    font-size: 13px;
-    padding: 7px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    letter-spacing: 0.06em;
-    transition: all 0.2s;
-  }
-
+  .btn { background: var(--accent-soft); border: 1px solid var(--accent-border); color: var(--accent-light); font-family: 'Crimson Pro', serif; font-size: 13px; padding: 7px 20px; border-radius: 4px; cursor: pointer; letter-spacing: 0.06em; transition: all 0.2s; }
   .btn:hover { background: rgba(196,146,74,0.2); }
-
-  .btn-ghost {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--text-tertiary);
-    font-family: 'Crimson Pro', serif;
-    font-size: 12px;
-    padding: 5px 14px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-ghost:hover { border-color: var(--border-med); color: var(--text-secondary); }
-
-  .insight-entry {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.25rem 1.5rem;
-    margin-bottom: 10px;
-    position: relative;
-    transition: all 0.2s;
-  }
-
+  .insight-entry { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.5rem; margin-bottom: 10px; position: relative; }
   .insight-entry:hover { border-color: var(--border-med); }
-
-  .insight-date {
-    font-size: 11px;
-    color: var(--text-tertiary);
-    letter-spacing: 0.06em;
-    margin-bottom: 6px;
-    font-family: 'Crimson Pro', serif;
-  }
-
+  .insight-date { font-size: 11px; color: var(--text-tertiary); margin-bottom: 6px; }
   .insight-text { font-size: 15px; color: var(--text-secondary); line-height: 1.65; }
-
-  .insight-delete {
-    position: absolute;
-    top: 12px; right: 12px;
-    background: none;
-    border: none;
-    color: var(--text-tertiary);
-    cursor: pointer;
-    font-size: 16px;
-    opacity: 0;
-    transition: opacity 0.2s;
-    padding: 2px 6px;
-  }
-
+  .insight-delete { position: absolute; top: 12px; right: 12px; background: none; border: none; color: var(--text-tertiary); cursor: pointer; font-size: 16px; opacity: 0; transition: opacity 0.2s; padding: 2px 6px; }
   .insight-entry:hover .insight-delete { opacity: 1; }
-
-  /* EDITABLE PLACEHOLDER */
-  .editable {
-    min-height: 40px;
-    outline: none;
-    border-radius: 4px;
-    padding: 4px 0;
-    transition: background 0.2s;
-    font-size: 14px;
-    color: var(--text-secondary);
-  }
-
+  .editable { min-height: 40px; outline: none; border-radius: 4px; padding: 4px 0; transition: background 0.2s; font-size: 14px; color: var(--text-secondary); }
   .editable:focus { background: rgba(196,146,74,0.05); padding: 4px 8px; }
   .editable:empty:before { content: attr(data-placeholder); color: var(--text-tertiary); font-style: italic; }
-
-  /* SHADOW SECTION */
-  .shadow-intro {
-    font-size: 16px;
-    color: var(--text-secondary);
-    line-height: 1.75;
-    max-width: 640px;
-    margin-bottom: 2rem;
-    font-style: italic;
-  }
-
-  /* PEAK SELF */
-  .condition-list { list-style: none; }
-  .condition-item {
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 15px;
-    color: var(--text-secondary);
-  }
-  .condition-item:last-child { border-bottom: none; }
-  .condition-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
-  .condition-text strong { color: var(--text-primary); font-weight: 600; display: block; margin-bottom: 2px; font-size: 15px; }
-
-  /* WOUNDS */
-  .wound-item {
-    padding: 1.5rem;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--rose);
-    border-radius: 0 8px 8px 0;
-    margin-bottom: 1rem;
-  }
-  .wound-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--rose); margin-bottom: 0.5rem; opacity: 0.8; }
-  .wound-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--text-primary); margin-bottom: 0.5rem; }
-  .wound-body { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
-
-  /* MASKS */
-  .mask-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 1.5rem;
-    transition: all 0.2s;
-  }
-  .mask-card:hover { border-color: var(--border-med); }
-  .mask-who { font-family: 'Cormorant Garamond', serif; font-size: 18px; margin-bottom: 6px; }
-  .mask-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem; }
-  .mask-consistent { font-size: 12px; color: var(--text-tertiary); font-style: italic; }
-
-  /* SCROLLSPY ANIMATION */
   .fade-in { opacity: 0; transform: translateY(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .fade-in.visible { opacity: 1; transform: translateY(0); }
-
-  /* QUOTE BLOCK */
-  .atlas-quote {
-    border-left: 2px solid var(--accent-border);
-    padding: 1rem 1.5rem;
-    margin: 2rem 0;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px;
-    font-style: italic;
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  /* IQ */
-  .iq-display {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 0.75rem;
-  }
-
-  .iq-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 56px;
-    font-weight: 300;
-    color: var(--accent-light);
-    line-height: 1;
-  }
-
-  .iq-label { font-size: 14px; color: var(--text-tertiary); }
-
-  /* CONFIDENCE PILL */
-  .confidence {
-    display: inline-block;
-    font-size: 11px;
-    padding: 2px 10px;
-    border-radius: 10px;
-    background: rgba(237,228,212,0.06);
-    color: var(--text-tertiary);
-    letter-spacing: 0.04em;
-    margin-top: 8px;
-  }
-
-  /* RESPONSIVE */
+  .fade-in.visible { opacity: 1; transform: none; }
+  .house-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .house-item { padding: 10px 12px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; }
+  .house-num { font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2px; }
+  .house-sign { font-size: 13px; color: var(--accent-light); }
+  .house-meaning { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .method-banner { background: rgba(196,146,74,0.05); border: 1px solid var(--accent-border); border-radius: 8px; padding: 1.25rem 1.75rem; margin-bottom: 2.5rem; display: flex; gap: 2rem; }
+  .method-item { flex: 1; }
+  .method-label { font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .method-val { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
   @media (max-width: 900px) {
-    .sidebar { display: none; }
-    .main { margin-left: 0; }
-    .section { padding: 3rem 2rem; }
-    .hero { padding: 4rem 2rem; }
-    .hero-ornament { display: none; }
-    .astro-grid { grid-template-columns: 1fr 1fr; }
-    .grid-2 { grid-template-columns: 1fr; }
-    .grid-3 { grid-template-columns: 1fr; }
-    .mbti-axes { grid-template-columns: 1fr; }
-    .ledger-row { grid-template-columns: 1fr; }
+    .sidebar { display: none; } .main { margin-left: 0; } .section { padding: 3rem 2rem; } .hero { padding: 4rem 2rem; }
+    .hero-ornament { display: none; } .grid-2, .grid-3, .mbti-axes, .ledger-row, .method-banner { grid-template-columns: 1fr; flex-direction: column; }
+    .house-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
 </head>
 <body>
-
-<!-- SIDEBAR -->
 <nav class="sidebar">
   <div class="sidebar-logo">Inner Atlas</div>
-  <div class="sidebar-sub">A personal cartography</div>
-
+  <div class="sidebar-sub">A case study</div>
   <div class="nav-group">
     <div class="nav-group-label">Foundation</div>
     <a href="#personality" class="nav-link">Personality Map</a>
-    <a href="#astrology" class="nav-link">Astrology</a>
+    <a href="#astrology" class="nav-link">Natal Chart</a>
     <a href="#neurodivergence" class="nav-link">Neurodivergence</a>
   </div>
-
   <div class="nav-group">
     <div class="nav-group-label">Architecture</div>
     <a href="#tensions" class="nav-link">Core Tensions</a>
     <a href="#states" class="nav-link">State System</a>
     <a href="#masks" class="nav-link">Masks & Versions</a>
-    <a href="#peak" class="nav-link">Peak Self</a>
+    <a href="#peak" class="nav-link">Peak Conditions</a>
   </div>
-
   <div class="nav-group">
     <div class="nav-group-label">Deeper</div>
     <a href="#triggers" class="nav-link">Trigger Map</a>
@@ -743,786 +173,447 @@
     <a href="#wounds" class="nav-link">Origins & Wounds</a>
     <a href="#shadow" class="nav-link">The Shadow</a>
   </div>
-
   <div class="nav-group">
     <div class="nav-group-label">Living</div>
     <a href="#unknown" class="nav-link">The Unknown</a>
-    <a href="#inbox" class="nav-link">Insight Inbox</a>
+    <a href="#inbox" class="nav-link">Observation Log</a>
   </div>
-
-  <div class="sidebar-footer">
-    Last updated<br>
-    <span id="last-updated" style="color: var(--text-secondary);"></span>
-  </div>
+  <div class="sidebar-footer">Last updated<br><span id="last-updated" style="color:var(--text-secondary);"></span></div>
 </nav>
 
-<!-- MAIN CONTENT -->
 <main class="main">
 
-  <!-- HERO -->
-  <section class="hero" id="top">
-    <div class="hero-ornament"></div>
-    <div class="hero-eyebrow">A private cartography of self</div>
-    <h1 class="hero-title">The<br><em>Inner</em><br>Atlas</h1>
-    <p class="hero-desc">A living map of who I am — my systems, patterns, triggers, contradictions, and the territory I have yet to chart.</p>
-    <div class="hero-meta">
-      <div class="hero-stat">
-        <div class="hero-stat-num">12</div>
-        <div class="hero-stat-label">Sections mapped</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num" id="insight-count">0</div>
-        <div class="hero-stat-label">Insights recorded</div>
-      </div>
-      <div class="hero-stat">
-        <div class="hero-stat-num">∞</div>
-        <div class="hero-stat-label">Territory remaining</div>
-      </div>
-    </div>
-  </section>
+<section class="hero" id="top">
+  <div class="hero-ornament"></div>
+  <div class="hero-eyebrow">A longitudinal self-study · In progress</div>
+  <h1 class="hero-title">The<br><em>Inner</em><br>Atlas</h1>
+  <p class="hero-desc">A systematic investigation of one subject: her patterns, architecture, triggers, contradictions, and the territory that remains uncharted. Precision over comfort.</p>
+  <div class="hero-meta">
+    <div><div class="hero-stat-num">12</div><div class="hero-stat-label">Domains mapped</div></div>
+    <div><div class="hero-stat-num" id="insight-count">0</div><div class="hero-stat-label">Observations logged</div></div>
+    <div><div class="hero-stat-num">∞</div><div class="hero-stat-label">Remaining territory</div></div>
+  </div>
+</section>
 
-  <!-- PERSONALITY MAP -->
-  <section class="section fade-in" id="personality">
-    <div class="section-header">
-      <span class="section-num">01</span>
-      <h2 class="section-title">Personality <em>Map</em></h2>
-      <div class="section-rule"></div>
-    </div>
-
-    <div class="grid-2" style="margin-bottom: 1.25rem;">
-      <!-- Big 5 -->
-      <div class="card">
-        <div class="card-label">Big Five · Estimated</div>
-
-        <div class="b5-row">
-          <div class="b5-label">Openness</div>
-          <div class="b5-track"><div class="b5-fill" style="width:92%; background: #C4924A;"></div></div>
-          <div class="b5-score" style="color: var(--accent);">92nd</div>
-        </div>
-        <div class="b5-row">
-          <div class="b5-label">Conscientiousness</div>
-          <div class="b5-track"><div class="b5-fill" style="width:25%; background: #5A5248;"></div></div>
-          <div class="b5-score">25th</div>
-        </div>
-        <div class="b5-row">
-          <div class="b5-label">Extraversion</div>
-          <div class="b5-track"><div class="b5-fill" style="width:28%; background: #5A5248;"></div></div>
-          <div class="b5-score">28th</div>
-        </div>
-        <div class="b5-row">
-          <div class="b5-label">Agreeableness</div>
-          <div class="b5-track"><div class="b5-fill" style="width:45%; background: #5A5248;"></div></div>
-          <div class="b5-score">45th</div>
-        </div>
-        <div class="b5-row" style="margin-bottom:0;">
-          <div class="b5-label">Neuroticism</div>
-          <div class="b5-track"><div class="b5-fill" style="width:70%; background: #C45A4A;"></div></div>
-          <div class="b5-score" style="color: #C45A4A;">70th</div>
-        </div>
-        <div style="margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--border);">
-          <p style="font-size: 13px; color: var(--text-tertiary); line-height: 1.6;">Openness is the most certain score — it shapes almost everything else. Conscientiousness being low doesn't mean laziness; combined with high openness, it means interest-driven, not structure-driven.</p>
-        </div>
-      </div>
-
-      <!-- MBTI -->
-      <div class="card">
-        <div class="card-label">MBTI · Estimated</div>
-        <div class="mbti-type">INTP</div>
-        <div class="mbti-name">The Architect</div>
-        <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem;">Pattern-seeker. Internally complex, externally opaque. Resists fixed rules while building elaborate private systems. Brilliant in bursts.</p>
-        <div class="mbti-axes">
-          <div class="mbti-axis-card">
-            <div class="mbti-axis-key">I / E</div>
-            <div class="mbti-axis-val">Introvert</div>
-            <div class="mbti-axis-note">Withdraws under stress. Inner world invisible.</div>
-          </div>
-          <div class="mbti-axis-card">
-            <div class="mbti-axis-key">N / S</div>
-            <div class="mbti-axis-val">Intuitive</div>
-            <div class="mbti-axis-note">Patterns, abstraction, connected systems.</div>
-          </div>
-          <div class="mbti-axis-card">
-            <div class="mbti-axis-key">T / F</div>
-            <div class="mbti-axis-val">Thinking <span style="font-size:11px; color:var(--text-tertiary); font-weight:400;">(uncertain)</span></div>
-            <div class="mbti-axis-note">Moral flexibility + analytical. May sit near INFP.</div>
-          </div>
-          <div class="mbti-axis-card">
-            <div class="mbti-axis-key">J / P</div>
-            <div class="mbti-axis-val">Perceiving</div>
-            <div class="mbti-axis-note">Fluid systems, hates fixed rules, adaptive.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- IQ estimate -->
+<!-- 01 PERSONALITY -->
+<section class="section fade-in" id="personality">
+  <div class="section-header"><span class="section-num">01</span><h2 class="section-title">Personality <em>Map</em></h2><div class="section-rule"></div></div>
+  <div class="method-banner">
+    <div class="method-item"><div class="method-label">Method</div><div class="method-val">Conversational analysis, self-report, behavioural inference. Not clinically validated instruments.</div></div>
+    <div class="method-item"><div class="method-label">Confidence</div><div class="method-val">Moderate. Openness and Neuroticism are the most robust estimates. T/F axis and IQ are approximate.</div></div>
+    <div class="method-item"><div class="method-label">Limitations</div><div class="method-val">Self-report bias. All figures will update with new data. Profile is a working document.</div></div>
+  </div>
+  <div class="grid-2" style="margin-bottom:1.25rem;">
     <div class="card">
-      <div style="display: grid; grid-template-columns: 180px 1fr; gap: 2rem; align-items: center;">
-        <div>
-          <div class="card-label">IQ · Estimated</div>
-          <div class="iq-display">
-            <div class="iq-num">120</div>
-            <div class="iq-label">– 135</div>
-          </div>
-          <div class="confidence">Moderate confidence</div>
-        </div>
-        <div style="font-size: 14px; color: var(--text-secondary); line-height: 1.7; border-left: 1px solid var(--border); padding-left: 2rem;">
-          Based on: pattern recognition as core strength, connecting disparate domains, multi-modal abstract thinking, quality of self-analysis, outside-the-box reasoning. Likely an <em>uneven profile</em> — some capacities may sit significantly above this range. ADHD profiles often produce cognitive spikes rather than uniform distribution. Cannot estimate precisely without actual tasks.
-        </div>
-      </div>
+      <div class="card-label">Big Five · Percentile estimates</div>
+      <div class="b5-row"><div class="b5-label">Openness</div><div class="b5-track"><div class="b5-fill" style="width:92%;background:#C4924A;"></div></div><div class="b5-score" style="color:var(--accent);">92nd</div></div>
+      <div class="b5-row"><div class="b5-label">Conscientiousness</div><div class="b5-track"><div class="b5-fill" style="width:25%;background:#5A5248;"></div></div><div class="b5-score">25th</div></div>
+      <div class="b5-row"><div class="b5-label">Extraversion</div><div class="b5-track"><div class="b5-fill" style="width:28%;background:#5A5248;"></div></div><div class="b5-score">28th</div></div>
+      <div class="b5-row"><div class="b5-label">Agreeableness</div><div class="b5-track"><div class="b5-fill" style="width:45%;background:#5A5248;"></div></div><div class="b5-score">45th</div></div>
+      <div class="b5-row" style="margin-bottom:0;"><div class="b5-label">Neuroticism</div><div class="b5-track"><div class="b5-fill" style="width:70%;background:#C45A4A;"></div></div><div class="b5-score" style="color:#C45A4A;">70th</div></div>
+      <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--border);font-size:13px;color:var(--text-tertiary);line-height:1.65;">Openness at the 92nd percentile is not a trait — it is a cognitive architecture. It shapes how the subject perceives, processes, and relates to structure. Low Conscientiousness combined with extreme Openness produces interest-driven engagement rather than discipline-driven output. The subject does not sustain effort through will. She sustains it through fascination.</div>
     </div>
-  </section>
-
-  <!-- ASTROLOGY -->
-  <section class="section fade-in" id="astrology">
-    <div class="section-header">
-      <span class="section-num">02</span>
-      <h2 class="section-title">Astro<em>logy</em></h2>
-      <div class="section-rule"></div>
-    </div>
-
-    <div class="astro-grid" style="margin-bottom: 1.5rem;">
-      <div class="astro-card">
-        <div class="astro-symbol">☉</div>
-        <div class="astro-placement">Sun</div>
-        <div class="astro-sign">Taurus</div>
-        <div class="astro-desc">Core identity rooted in the physical — body, beauty, sensory experience. Fixed, earthy, deeply stable beneath the shifting surface. Explains the body-confidence anchor.</div>
-      </div>
-      <div class="astro-card">
-        <div class="astro-symbol">↑</div>
-        <div class="astro-placement">Rising</div>
-        <div class="astro-sign">Gemini</div>
-        <div class="astro-desc">The mask the world sees: fluid, multiple, impossible to pin down. Why people describe you so differently. The chameleon mechanism. Social adaptability layered over a fixed core.</div>
-      </div>
-      <div class="astro-card">
-        <div class="astro-symbol">☽</div>
-        <div class="astro-placement">Moon</div>
-        <div class="astro-sign">Libra</div>
-        <div class="astro-desc">Emotional need for harmony, balance, being liked. Hyperaware of how you're perceived. Withdrawal under conflict. The scrutiny-aversion and social anxiety live here.</div>
-      </div>
-      <div class="astro-card">
-        <div class="astro-symbol">♀</div>
-        <div class="astro-placement">Venus</div>
-        <div class="astro-sign">Aries</div>
-        <div class="astro-desc">Desire is direct, immediate, personal. Attractiveness as self-worth. Wants to be seen on own terms — desired but not dissected. The "dressed well = myself" equation.</div>
-      </div>
-    </div>
-
-    <div class="atlas-quote">
-      Taurus Sun hidden behind Gemini Rising: the part of you that wants to settle somewhere in permanent tension with the part that keeps shape-shifting.
-    </div>
-
-    <div class="card" style="margin-top: 1.25rem;">
-      <div class="card-label">Synthesis</div>
-      <p style="font-size: 15px; color: var(--text-secondary); line-height: 1.75;">The chart tells a coherent story: a grounded, body-anchored Taurus core (Sun) that barely gets seen, because it's fronted by a Gemini rising that adapts, shifts, and shows people different facets. The Libra Moon creates constant calibration — am I liked? am I harmonious? — which drives both the social anxiety and the withdrawal. The Aries Venus says: I want, directly and unapologetically — but on my terms. Rio is written all over this chart: warm, sensory-rich, physically embodied, low-judgment, no one stares too hard.</p>
-    </div>
-  </section>
-
-  <!-- NEURODIVERGENCE -->
-  <section class="section fade-in" id="neurodivergence">
-    <div class="section-header">
-      <span class="section-num">03</span>
-      <h2 class="section-title">Neuro<em>divergence</em></h2>
-      <div class="section-rule"></div>
-    </div>
-
-    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 640px; margin-bottom: 2rem;">These are not diagnoses. They are lenses. They explain the wiring, not what's wrong with it.</p>
-
-    <div class="grid-2" style="margin-bottom: 1.25rem;">
-      <div class="card">
-        <div class="card-label" style="color: #A99FCC;">ADHD · Strong signal</div>
-        <div class="tag-cloud" style="margin-bottom: 1.25rem;">
-          <span class="tag tag-purple">multiple simultaneous thoughts</span>
-          <span class="tag tag-purple">constant background music</span>
-          <span class="tag tag-purple">many tabs open</span>
-          <span class="tag tag-purple">systems that don't stick</span>
-          <span class="tag tag-purple">impulsive, sends mid-thought</span>
-          <span class="tag tag-purple">deep rule-aversion</span>
-          <span class="tag tag-purple">interest-driven attention</span>
-        </div>
-        <p style="font-size: 13px; color: var(--text-tertiary); line-height: 1.6;">The chaotic inner world isn't noise — it's high-velocity parallel processing. The inability to maintain systems isn't weakness, it's a mismatch between structure and how this brain actually runs.</p>
-      </div>
-      <div class="card">
-        <div class="card-label" style="color: #7ABDB5;">Autism (likely masking) · Moderate signal</div>
-        <div class="tag-cloud" style="margin-bottom: 1.25rem;">
-          <span class="tag tag-teal">huge variance in how others see you</span>
-          <span class="tag tag-teal">inner world invisible to others</span>
-          <span class="tag tag-teal">dislikes intense scrutiny</span>
-          <span class="tag tag-teal">pattern recognition as core strength</span>
-          <span class="tag tag-teal">context-dependent functioning</span>
-          <span class="tag tag-teal">follows rules only when watched</span>
-          <span class="tag tag-teal">multi-modal sensory inner experience</span>
-        </div>
-        <p style="font-size: 13px; color: var(--text-tertiary); line-height: 1.6;">AuDHD (the ADHD + autism overlap) is chronically underdiagnosed in women, who mask early and effectively. The "flat personality / interesting" split is classic masking variance.</p>
-      </div>
-    </div>
-
     <div class="card">
-      <div class="card-label">What the wiring explains</div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-        <div>
-          <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">The multi-modal mind</div>
-          <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Verbal, visual, feeling, and sound thoughts running simultaneously isn't unusual — it's how this brain processes. Multiple channels, not one.</div>
-        </div>
-        <div>
-          <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">The invisible interior</div>
-          <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">A very full inner world that almost nobody accesses is a feature of both ADHD (self-absorbed in thought) and autism masking (deliberate internal/external split).</div>
-        </div>
-        <div>
-          <div style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">The performance gap</div>
-          <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">Functioning varies dramatically with conditions (cycle, energy, confidence, environment). This isn't inconsistency — it's a high-sensitivity system responding to inputs.</div>
-        </div>
+      <div class="card-label">MBTI · Estimated type</div>
+      <div class="mbti-type">INTP</div>
+      <div class="mbti-name">The Architect</div>
+      <p style="font-size:14px;color:var(--text-secondary);line-height:1.65;margin-bottom:1rem;">The subject presents the hallmarks: a structurally complex inner world inaccessible to most external observers; a drive toward systemic understanding over surface phenomena; resistance to imposed structure; and significant output variance depending on intrinsic engagement. The INTP does not perform on demand. She performs when something is worth understanding.</p>
+      <div class="mbti-axes">
+        <div class="mbti-axis-card"><div class="mbti-axis-key">I / E</div><div class="mbti-axis-val">Introvert</div><div class="mbti-axis-note">Primary processing is internal. Withdraws under stress. Social capacity depletes.</div></div>
+        <div class="mbti-axis-card"><div class="mbti-axis-key">N / S</div><div class="mbti-axis-val">Intuitive</div><div class="mbti-axis-note">Operates through pattern, abstraction, and cross-domain connection.</div></div>
+        <div class="mbti-axis-card"><div class="mbti-axis-key">T / F</div><div class="mbti-axis-val">Thinking <span style="font-size:11px;color:var(--text-tertiary);font-weight:400;">(uncertain)</span></div><div class="mbti-axis-note">Moral flexibility and analytical priority suggest T. People-reading and emotional attunement suggest F. Contested.</div></div>
+        <div class="mbti-axis-card"><div class="mbti-axis-key">J / P</div><div class="mbti-axis-val">Perceiving</div><div class="mbti-axis-note">Self-constructed and flexible systems. Rules adopted selectively. Structure collapses without intrinsic motivation.</div></div>
       </div>
     </div>
-  </section>
-
-  <!-- CORE TENSIONS -->
-  <section class="section fade-in" id="tensions">
-    <div class="section-header">
-      <span class="section-num">04</span>
-      <h2 class="section-title">Core <em>Tensions</em></h2>
-      <div class="section-rule"></div>
+  </div>
+  <div class="card">
+    <div style="display:grid;grid-template-columns:160px 1fr;gap:2rem;align-items:center;">
+      <div>
+        <div class="card-label">IQ · Estimated</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:0.5rem;">
+          <span style="font-family:'Cormorant Garamond',serif;font-size:56px;font-weight:300;color:var(--accent-light);line-height:1;">120</span>
+          <span style="font-size:14px;color:var(--text-tertiary);">– 135</span>
+        </div>
+        <span style="display:inline-block;font-size:11px;padding:2px 10px;border-radius:10px;background:rgba(237,228,212,0.06);color:var(--text-tertiary);">Approximate</span>
+      </div>
+      <div style="font-size:14px;color:var(--text-secondary);line-height:1.75;border-left:1px solid var(--border);padding-left:2rem;">
+        Derived from pattern recognition identified as a primary cognitive strength; facility with cross-domain connection; multi-modal parallel processing; quality and speed of metacognitive analysis. The profile is almost certainly uneven. ADHD profiles frequently produce significant spikes in fluid reasoning alongside lower consistency in processing and sustained output. Some capacities sit above this range. The figure is a centre-of-mass estimate, not a ceiling.
+      </div>
     </div>
+  </div>
+</section>
 
-    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 600px; margin-bottom: 2rem;">These are not problems to resolve. They are the shape of you. Understanding them is more useful than fixing them.</p>
+<!-- 02 NATAL CHART -->
+<section class="section fade-in" id="astrology">
+  <div class="section-header"><span class="section-num">02</span><h2 class="section-title">Natal <em>Chart</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">Tropical zodiac. Placidus house system. Orb 0. Interpreted as a psychological portrait. The chart describes architecture, not fate.</p>
 
+  <div class="stellium-banner">
+    <div style="font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">Notable configuration · Aries Stellium</div>
+    <div style="font-size:14px;color:var(--text-secondary);line-height:1.65;">Mercury, Venus, and Saturn all occupy Aries. Three planets in the sign of initiation, self, and assertion — with Saturn actively suppressing the impulse. The internal tension between explosive forward motion and its own restraint is a defining feature of the subject's psychology. Thought wants to fire; action wants to charge; Saturn pulls everything back.</div>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div class="card-label">Planetary positions · Full chart</div>
+    <table class="planet-table">
+      <thead><tr><th style="width:5%;">☽</th><th style="width:13%;">Planet</th><th style="width:14%;">Sign</th><th style="width:9%;">Degree</th><th style="width:8%;">House</th><th>Psychological significance</th></tr></thead>
+      <tbody>
+        <tr><td style="font-size:17px;">☉</td><td style="color:var(--text-primary);">Sun</td><td style="color:var(--accent-light);">Taurus</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">16°43'</td><td><span class="house-badge">XII</span></td><td>Core identity is Taurean: grounded in the physical, sensory, material. The 12th house placement means this Sun is hidden — from external observers and partially from the subject herself. The most stable part of her occupies the most concealed sector of the chart.</td></tr>
+        <tr><td style="font-size:17px;">☽</td><td style="color:var(--text-primary);">Moon</td><td style="color:var(--accent-light);">Libra</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">1°33'</td><td><span class="house-badge">IV</span></td><td>Emotional life lives in the most private sector of the chart. The 4th house Moon does not surface easily or reliably. Libra Moon calibrates constantly toward harmony and social approval, generating chronic low-level awareness of how she is received. This process runs continuously, at significant energy cost, largely below conscious awareness.</td></tr>
+        <tr><td style="font-size:17px;">☿</td><td style="color:var(--text-primary);">Mercury</td><td style="color:var(--accent-light);">Aries</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">20°21'</td><td><span class="house-badge">XI</span></td><td>Thinking is fast, direct, and impulsive. Thoughts arrive complete and want immediate expression. This is the mechanism behind cut-off messages, rapid-fire idea generation, and impatience with sequential or slow reasoning. Mercury in Aries does not wait to be sure — it sends, then reconsiders.</td></tr>
+        <tr><td style="font-size:17px;">♀</td><td style="color:var(--text-primary);">Venus</td><td style="color:var(--accent-light);">Aries</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">4°09'</td><td><span class="house-badge">XI</span></td><td>Desire is immediate and self-directed. Attractiveness is structurally tied to self-worth. Venus in Aries wants to be desired on her own terms, and registers sharply when that desire is unseen or dismissed. The body-confidence-as-prerequisite equation originates significantly here.</td></tr>
+        <tr><td style="font-size:17px;">♂</td><td style="color:var(--text-primary);">Mars</td><td style="color:var(--accent-light);">Taurus</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">18°01'</td><td><span class="house-badge">XII</span></td><td>Mars in the 12th is suppressed drive. The impulse to act, assert, and pursue is present and substantial — it turns inward rather than outward. This placement contributes directly to the withdrawal under stress. Anger and assertiveness are swallowed. The subject often does not know she is angry until considerable time has passed.</td></tr>
+        <tr><td style="font-size:17px;">♃</td><td style="color:var(--text-primary);">Jupiter</td><td style="color:var(--accent-light);">Pisces</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">20°46'</td><td><span class="house-badge">X</span></td><td>Jupiter on the Midheaven expands the public image and vocational expression. Pisces here lends the public self a fluid, imaginative, intuitive quality. The subject's most visible capacities are connected to feeling, creativity, and dissolving conventional frames. The pull toward warm, immersive, sensory-rich environments (Rio) is partly this placement.</td></tr>
+        <tr><td style="font-size:17px;">♄</td><td style="color:var(--text-primary);">Saturn</td><td style="color:var(--accent-light);">Aries</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">26°21'</td><td><span class="house-badge">XI</span></td><td>Saturn in Aries restricts the very energy Aries wants to express: initiative, directness, self-assertion. In the 11th house, this restriction manifests specifically in group and social contexts. The social anxiety has a structural astrological origin here. It is not a character flaw. It is Saturn doing what Saturn does.</td></tr>
+        <tr><td style="font-size:17px;">♅</td><td style="color:var(--text-primary);">Uranus</td><td style="color:var(--accent-light);">Aquarius</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">12°42'</td><td><span class="house-badge">IX</span></td><td>Generational placement. Contributes to the pattern of unconventional thinking, resistance to orthodoxy, and a cognitive architecture that moves laterally rather than linearly.</td></tr>
+        <tr><td style="font-size:17px;">♆</td><td style="color:var(--text-primary);">Neptune</td><td style="color:var(--accent-light);">Aquarius</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">2°11' R</td><td><span class="house-badge">IX</span></td><td>Retrograde. Generational. Dissolution of fixed belief structures; search for meaning through unconventional frameworks.</td></tr>
+        <tr><td style="font-size:17px;">♇</td><td style="color:var(--text-primary);">Pluto</td><td style="color:var(--accent-light);">Sagittarius</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">7°15' R</td><td><span class="house-badge">VII</span></td><td>Retrograde. Generational. Transformation through the 7th house of partnership and the other. Power dynamics in close relationships are likely a recurring and significant theme.</td></tr>
+        <tr><td style="font-size:17px;">⚸</td><td style="color:var(--text-primary);">Lilith</td><td style="color:var(--accent-light);">Libra</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">16°04'</td><td><span class="house-badge">V</span></td><td>The shadow of the harmony-seeking Libra Moon. Lilith is what refuses to be tamed. In Libra, there is rage underneath the compliance — suppressed frustration at the ongoing calibration toward others' approval. This is the part that does not want to be liked, and resents having to perform as if it does.</td></tr>
+        <tr><td style="font-size:17px;">☊</td><td style="color:var(--text-primary);">North Node</td><td style="color:var(--accent-light);">Virgo</td><td style="color:var(--text-tertiary);font-family:'Cormorant Garamond',serif;">8°05'</td><td><span class="house-badge">III</span></td><td>The developmental direction of this lifetime. 3rd house: communication, analysis, the written and spoken word, precision in articulation. Virgo: discernment, systematic observation, self-improvement through detail. Building this document — mapping and analysing the self with precision — is a direct expression of this North Node. This is the work.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-bottom:1.25rem;">
+    <div class="card-label">House cusps</div>
+    <div class="house-grid">
+      <div class="house-item"><div class="house-num">ASC / I</div><div class="house-sign">Gemini 12°44'</div><div class="house-meaning">Mask; social interface</div></div>
+      <div class="house-item"><div class="house-num">II</div><div class="house-sign">Cancer 12°27'</div><div class="house-meaning">Resources; security</div></div>
+      <div class="house-item"><div class="house-num">III</div><div class="house-sign">Leo 14°11'</div><div class="house-meaning">Communication; local mind</div></div>
+      <div class="house-item"><div class="house-num">IV</div><div class="house-sign">Virgo 17°21'</div><div class="house-meaning">Private self; roots</div></div>
+      <div class="house-item"><div class="house-num">V</div><div class="house-sign">Libra 19°05'</div><div class="house-meaning">Creativity; pleasure</div></div>
+      <div class="house-item"><div class="house-num">VI</div><div class="house-sign">Scorpio 17°19'</div><div class="house-meaning">Daily work; health</div></div>
+      <div class="house-item"><div class="house-num">VII</div><div class="house-sign">Sagittarius 12°44'</div><div class="house-meaning">Partnership; the other</div></div>
+      <div class="house-item"><div class="house-num">VIII</div><div class="house-sign">Capricorn 12°27'</div><div class="house-meaning">Transformation; shared</div></div>
+      <div class="house-item"><div class="house-num">IX</div><div class="house-sign">Aquarius 14°11'</div><div class="house-meaning">Philosophy; higher mind</div></div>
+      <div class="house-item"><div class="house-num">MC / X</div><div class="house-sign">Pisces 17°21'</div><div class="house-meaning">Public image; calling</div></div>
+      <div class="house-item"><div class="house-num">XI</div><div class="house-sign">Aries 19°05'</div><div class="house-meaning">Community; social ideals</div></div>
+      <div class="house-item"><div class="house-num">XII</div><div class="house-sign">Taurus 17°19'</div><div class="house-meaning">Hidden self; the unseen</div></div>
+    </div>
+  </div>
+
+  <div class="finding">
+    <div class="finding-label">Key finding · 12th house concentration</div>
+    <div class="finding-title">The Sun and Mars are both hidden</div>
+    <div class="finding-body">Both the core identity (Sun in Taurus) and the capacity for assertion and drive (Mars in Taurus) occupy the 12th house — the most concealed sector in the chart. The subject's most fundamental self and her mechanism for acting on its behalf are architecturally submerged. The inner world is rich and active. The channel outward is suppressed. Those who read the subject as flat are not wrong about what they see. They are seeing the absence of what the chart has placed underground.</div>
+  </div>
+  <div class="finding finding-rose">
+    <div class="finding-label">Key finding · Moon in the 4th</div>
+    <div class="finding-title">Emotional life lives in the innermost room</div>
+    <div class="finding-body">A Moon in the 4th house does not travel far from origin. The subject's emotional processing is deep, private, and anchored in interior sanctuary. Combined with Libra's need for harmony, the result is an emotional life that is simultaneously intense and almost entirely invisible. The Libra Moon also runs a continuous background calibration — assessing social harmony, reading reception, adjusting — at significant ongoing energy cost.</div>
+  </div>
+  <div class="finding finding-purple">
+    <div class="finding-label">Key finding · Lilith in Libra</div>
+    <div class="finding-title">Suppressed rage beneath the harmony</div>
+    <div class="finding-body">Lilith marks where something refuses to be socialised. In Libra, Lilith is in perpetual tension with the Moon's drive toward approval and peace. The result is an undercurrent of anger at the performance of agreeableness — at the social anxiety that forces compliance, at the gap between what is felt and what is shown. This anger rarely surfaces directly. It appears as sudden disengagement, withdrawal, or flickering contempt for situations that demand too much performance. It is legitimate. It has not found its full expression.</div>
+  </div>
+  <div class="finding finding-teal">
+    <div class="finding-label">Key finding · North Node in Virgo, 3rd house</div>
+    <div class="finding-title">This project is the path</div>
+    <div class="finding-body">The North Node in Virgo in the 3rd house describes the developmental direction of this lifetime: precision in communication, analytical observation of the immediate environment, systematic cataloguing of detail in service of self-improvement and articulation. The South Node (Pisces) describes where the subject defaults — dissolution, feeling, the oceanic and undefined. The north asks her toward structure, analysis, and precise articulation of what she observes. The Inner Atlas is not incidental to this trajectory. It is the trajectory.</div>
+  </div>
+
+  <div class="atlas-quote">A Taurus Sun hidden in the 12th house, fronted by a Gemini rising. The most stable part of her is the least visible. The most visible part of her is the most changeable. This is the central paradox of the chart.</div>
+</section>
+
+<!-- 03 NEURODIVERGENCE -->
+<section class="section fade-in" id="neurodivergence">
+  <div class="section-header"><span class="section-num">03</span><h2 class="section-title">Neuro<em>divergence</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">Not diagnoses. Descriptive frameworks for patterns that deviate consistently from neurotypical norms. Pervasive, cross-contextual, and coherent across the full profile.</p>
+  <div class="grid-2" style="margin-bottom:1.25rem;">
     <div class="card">
-      <div class="tension-item">
-        <div class="tension-dot"></div>
-        <div class="tension-pole">Rich, loud inner world</div>
-        <div class="tension-vs">↔</div>
-        <div class="tension-pole">Invisible to almost everyone</div>
+      <div class="card-label" style="color:#A99FCC;">ADHD · Strong signal</div>
+      <div class="tag-cloud" style="margin-bottom:1.25rem;">
+        <span class="tag tag-purple">multiple simultaneous thought streams</span>
+        <span class="tag tag-purple">constant background music</span>
+        <span class="tag tag-purple">chronic multi-tab processing</span>
+        <span class="tag tag-purple">systems initiated, rarely sustained</span>
+        <span class="tag tag-purple">impulsive output</span>
+        <span class="tag tag-purple">rule aversion</span>
+        <span class="tag tag-purple">interest-contingent attention</span>
+        <span class="tag tag-purple">hyperanalysis of self and environment</span>
       </div>
-      <div class="tension-item">
-        <div class="tension-dot"></div>
-        <div class="tension-pole">Craves connection</div>
-        <div class="tension-vs">↔</div>
-        <div class="tension-pole">Hates being perceived too closely</div>
-      </div>
-      <div class="tension-item">
-        <div class="tension-dot"></div>
-        <div class="tension-pole">Rule-breaker by instinct</div>
-        <div class="tension-vs">↔</div>
-        <div class="tension-pole">Compliant when watched (social anxiety)</div>
-      </div>
-      <div class="tension-item">
-        <div class="tension-dot"></div>
-        <div class="tension-pole">Multiple distinct identities</div>
-        <div class="tension-vs">↔</div>
-        <div class="tension-pole">Uncertain which one is real</div>
-      </div>
-      <div class="tension-item">
-        <div class="tension-dot"></div>
-        <div class="tension-pole">High fluid intelligence</div>
-        <div class="tension-vs">↔</div>
-        <div class="tension-pole">Chaotic; can't maintain systems</div>
-      </div>
-      <div class="tension-item">
-        <div class="tension-dot"></div>
-        <div class="tension-pole">Taurus core needs roots, stability</div>
-        <div class="tension-vs">↔</div>
-        <div class="tension-pole">Gemini rising constantly shifts, adapts</div>
-      </div>
-      <div class="tension-item" style="border-bottom: none;">
-        <div class="tension-dot"></div>
-        <div class="tension-pole">Body confidence as identity anchor</div>
-        <div class="tension-vs">↔</div>
-        <div class="tension-pole">Currently not feeling it</div>
-      </div>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.65;">The subject's multi-modal inner experience — verbal, visual, kinaesthetic, and auditory streams running concurrently with persistent background music — describes a parallel processing architecture at odds with sequential, sustained-attention demands. The ADHD brain does not lack attention. It lacks the capacity to regulate where attention goes. In this subject, attention distributes at high velocity across everything simultaneously.</p>
     </div>
-  </section>
-
-  <!-- STATE SYSTEM -->
-  <section class="section fade-in" id="states">
-    <div class="section-header">
-      <span class="section-num">05</span>
-      <h2 class="section-title">State <em>System</em></h2>
-      <div class="section-rule"></div>
-    </div>
-
-    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 620px; margin-bottom: 2rem;">Named states help you identify where you are and navigate better. These are early drafts — refine them as you learn yourself more.</p>
-
-    <div class="grid-2">
-      <div class="state-card state-a">
-        <div class="state-name">Rio Mode</div>
-        <div class="state-weather">Clear skies · Full presence</div>
-        <div class="state-body">Embodied, confident, socially alive. Body feels right. Environment is warm and low-judgment. Conversation flows. Intelligence and charm both accessible. The most integrated version of self — Taurus sun fully expressed.</div>
-        <div class="state-triggers" style="margin-top: 1rem;">
-          <span style="color: var(--teal); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">Conditions: </span> body confidence, aesthetic environment, people on same wavelength, warmth, absence of harsh scrutiny
-        </div>
-      </div>
-
-      <div class="state-card state-b">
-        <div class="state-name">Glass House</div>
-        <div class="state-weather">Overcast · High social anxiety</div>
-        <div class="state-body">Being watched too carefully. Performing compliance. Hyper-aware of judgment. Gemini rising working overtime to present an acceptable surface while the interior goes quiet and guarded. The "flat personality" others sometimes see.</div>
-        <div class="state-triggers" style="margin-top: 1rem;">
-          <span style="color: var(--teal); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">Triggers: </span> authority figures, unfamiliar social settings, being the centre of attention, perceived judgment
-        </div>
-      </div>
-
-      <div class="state-card state-c">
-        <div class="state-name">The Spiral</div>
-        <div class="state-weather">Electrical storm · Internal</div>
-        <div class="state-body">Hyper-analysis activated. Thoughts multiplying. Worries compounding. The inner world gets very loud and the outer world goes very quiet. Withdrawal. Hard to access the socially capable self. Can last hours or days.</div>
-        <div class="state-triggers" style="margin-top: 1rem;">
-          <span style="color: var(--teal); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">Triggers: </span> something goes wrong, rejection or perceived rejection, body dissatisfaction, overstimulation
-        </div>
-      </div>
-
-      <div class="state-card state-d">
-        <div class="state-name">Flow State</div>
-        <div class="state-weather">Still and charged</div>
-        <div class="state-body">The ADHD brain locked onto something interesting. All tabs converge on one problem. Time disappears. The pattern-connecting and outside-the-box thinking are fully online. Rare but the most productive and satisfying state.</div>
-        <div class="state-triggers" style="margin-top: 1rem;">
-          <span style="color: var(--teal); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">Conditions: </span> genuine intellectual or creative interest, no performance pressure, right energy level
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top: 1.25rem; padding: 1.25rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;">
-      <div class="card-label">Cycle influence</div>
-      <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.7;">Your cycle significantly affects which state is accessible. This isn't weakness — it's high biological sensitivity. Mapping which phase of your cycle correlates with which state would give you powerful predictive data. Consider logging this in your Insight Inbox.</p>
-    </div>
-  </section>
-
-  <!-- MASKS & VERSIONS -->
-  <section class="section fade-in" id="masks">
-    <div class="section-header">
-      <span class="section-num">06</span>
-      <h2 class="section-title">Masks &amp; <em>Versions</em></h2>
-      <div class="section-rule"></div>
-    </div>
-
-    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 620px; margin-bottom: 2rem;">Not inauthenticity — contextual expression. What remains consistent across all versions is closer to the real you than any single version alone.</p>
-
-    <div class="grid-3" style="margin-bottom: 1.25rem;">
-      <div class="mask-card">
-        <div class="mask-who">With close friends</div>
-        <div class="mask-desc">The bon vivant. Curious, alive, interesting. The inner world partially accessible. Wit and warmth both present. The most integrated version publicly available.</div>
-        <div class="mask-consistent">What's real here: the curiosity, the warmth</div>
-      </div>
-      <div class="mask-card">
-        <div class="mask-who">With strangers / new people</div>
-        <div class="mask-desc">Gemini rising fully deployed. Observing, calibrating, presenting the version most likely to fit the room. Can read as awkward or flat if anxiety is high.</div>
-        <div class="mask-consistent">What's real here: the observation, the reading of people</div>
-      </div>
-      <div class="mask-card">
-        <div class="mask-who">Under scrutiny</div>
-        <div class="mask-desc">Surface compliance, interior withdrawal. The "flat personality" description lives here — not flat, but locked. Social anxiety drives rule-following you'd otherwise ignore.</div>
-        <div class="mask-consistent">What's real here: the sensitivity, the self-protection</div>
-      </div>
-      <div class="mask-card">
-        <div class="mask-who">When intellectually sparked</div>
-        <div class="mask-desc">A version most people never see. Pattern-connecting at speed. Generative, surprising, genuinely alive. This version can be startling to people who only know the guarded version.</div>
-        <div class="mask-consistent">What's real here: the intelligence, the aliveness</div>
-      </div>
-      <div class="mask-card">
-        <div class="mask-who">Alone</div>
-        <div class="mask-desc">The truest version, and also the loudest. All tabs open. Music running. Thoughts multiplying. The person nobody really knows. The person this atlas is trying to map.</div>
-        <div class="mask-consistent">What's real here: everything</div>
-      </div>
-      <div class="mask-card" style="border-style: dashed; border-color: var(--text-tertiary); opacity: 0.6;">
-        <div class="mask-who" style="color: var(--text-tertiary);">Add a version...</div>
-        <div class="mask-desc" contenteditable="true" data-placeholder="Who are you with this person or in this context?" class="editable" style="min-height: 60px;"></div>
-        <div class="mask-consistent" contenteditable="true" data-placeholder="What's consistently real here?" class="editable"></div>
-      </div>
-    </div>
-
-    <div class="atlas-quote">
-      The person who appears to everyone is not less real. But the person who appears to no one is also you.
-    </div>
-  </section>
-
-  <!-- PEAK SELF -->
-  <section class="section fade-in" id="peak">
-    <div class="section-header">
-      <span class="section-num">07</span>
-      <h2 class="section-title">Peak <em>Self</em></h2>
-      <div class="section-rule"></div>
-    </div>
-
-    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 620px; margin-bottom: 2rem;">The conditions under which the most integrated, capable, alive version of you emerges. Not aspirational — observable.</p>
-
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-label">Established conditions</div>
-        <ul class="condition-list">
-          <li class="condition-item">
-            <span class="condition-icon">◈</span>
-            <div><strong>Body confidence is present</strong> Not overweight, dressed well. The Taurus sun requires the physical vessel to feel right. This is not vanity — it's a genuine precondition for psychological access.</div>
-          </li>
-          <li class="condition-item">
-            <span class="condition-icon">◈</span>
-            <div><strong>People on the same wavelength</strong> Intellectual or temperamental alignment in the room. You don't need many — one or two is enough. Wrong company depletes faster than no company.</div>
-          </li>
-          <li class="condition-item">
-            <span class="condition-icon">◈</span>
-            <div><strong>Soft attention, not hard attention</strong> People present with you, adding and responding — not staring, analysing, or scrutinising. You want to be heard, not dissected.</div>
-          </li>
-          <li class="condition-item" style="border-bottom: none;">
-            <span class="condition-icon">◈</span>
-            <div><strong>The Rio environment</strong> Warm, relaxed, sensory-rich, aesthetically pleasing, low-judgment culture. Physical ease. This is the external proxy for optimal internal state.</div>
-          </li>
-        </ul>
-      </div>
-      <div class="card">
-        <div class="card-label">Add your own conditions</div>
-        <p style="font-size: 13px; color: var(--text-tertiary); margin-bottom: 1rem; font-style: italic;">Click any field to edit. What else makes you most fully yourself?</p>
-        <div id="peak-conditions">
-          <div style="display:flex; gap: 10px; align-items:flex-start; padding: 12px 0; border-bottom: 1px solid var(--border);">
-            <span style="color: var(--accent); font-size:18px; flex-shrink:0; margin-top:2px;">◈</span>
-            <div contenteditable="true" data-placeholder="Describe a condition for your peak self..." class="editable" style="flex:1; min-height:24px;"></div>
-          </div>
-          <div style="display:flex; gap: 10px; align-items:flex-start; padding: 12px 0; border-bottom: 1px solid var(--border);">
-            <span style="color: var(--accent); font-size:18px; flex-shrink:0; margin-top:2px;">◈</span>
-            <div contenteditable="true" data-placeholder="Describe a condition for your peak self..." class="editable" style="flex:1; min-height:24px;"></div>
-          </div>
-          <div style="display:flex; gap: 10px; align-items:flex-start; padding: 12px 0;">
-            <span style="color: var(--accent); font-size:18px; flex-shrink:0; margin-top:2px;">◈</span>
-            <div contenteditable="true" data-placeholder="Describe a condition for your peak self..." class="editable" style="flex:1; min-height:24px;"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRIGGER MAP -->
-  <section class="section fade-in" id="triggers">
-    <div class="section-header">
-      <span class="section-num">08</span>
-      <h2 class="section-title">Trigger <em>Map</em></h2>
-      <div class="section-rule"></div>
-    </div>
-
-    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 620px; margin-bottom: 2rem;">What activates which response. Build this over time — it becomes one of the most useful maps you own.</p>
-
     <div class="card">
-      <table class="trigger-table">
-        <thead>
-          <tr>
-            <th style="width:28%;">Stimulus</th>
-            <th style="width:20%;">Response</th>
-            <th style="width:30%;">What it produces</th>
-            <th style="width:22%;">What helps</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="trigger-stimulus">Being scrutinised / watched too intensely</td>
-            <td><span class="response-badge r-mask">Masking</span></td>
-            <td>Gemini rising activates. Surface compliance. Interior locks down. The "flat" version appears.</td>
-            <td>Soft attention. Small conversational agreements. Low-pressure environment.</td>
-          </tr>
-          <tr>
-            <td class="trigger-stimulus">Something goes wrong</td>
-            <td><span class="response-badge r-withdraw">Withdraw</span></td>
-            <td>Go quiet. Disappear. Libra moon avoids conflict. Process internally, often for a long time.</td>
-            <td>Space without pressure to explain. Time. Returning when ready.</td>
-          </tr>
-          <tr>
-            <td class="trigger-stimulus">Body dissatisfaction</td>
-            <td><span class="response-badge r-spiral">Spiral</span></td>
-            <td>Self-worth dips. Access to social and intellectual self narrows. Taurus sun requires physical ease as a foundation.</td>
-            <td>Movement that feels good (not punishing). Dressing well regardless. Environment that doesn't mirror the discomfort.</td>
-          </tr>
-          <tr>
-            <td class="trigger-stimulus">Intellectual match / stimulation</td>
-            <td><span class="response-badge" style="background:rgba(196,146,74,0.12); color:var(--accent-light);">Activate</span></td>
-            <td>Full engagement. Pattern-connecting at speed. The inner world becomes accessible. One of the few things that reliably bypasses anxiety.</td>
-            <td>This is a resource. Seek it deliberately.</td>
-          </tr>
-          <tr>
-            <td class="trigger-stimulus" contenteditable="true" data-placeholder="Add a trigger..." style="color:var(--text-tertiary); font-style:italic;">Add a trigger...</td>
-            <td contenteditable="true" data-placeholder="Response type" style="color:var(--text-tertiary); font-style:italic; font-size:13px;">Response</td>
-            <td contenteditable="true" data-placeholder="What it produces..." style="color:var(--text-tertiary); font-style:italic; font-size:13px;">What it produces...</td>
-            <td contenteditable="true" data-placeholder="What helps..." style="color:var(--text-tertiary); font-style:italic; font-size:13px;">What helps...</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="card-label" style="color:#7ABDB5;">Autism (masking) · Moderate signal</div>
+      <div class="tag-cloud" style="margin-bottom:1.25rem;">
+        <span class="tag tag-teal">extreme variance in external presentation</span>
+        <span class="tag tag-teal">interior systematically concealed</span>
+        <span class="tag tag-teal">scrutiny aversion</span>
+        <span class="tag tag-teal">pattern recognition as primary strength</span>
+        <span class="tag tag-teal">context-dependent functioning</span>
+        <span class="tag tag-teal">rule compliance under observation only</span>
+        <span class="tag tag-teal">sensory richness of inner experience</span>
+      </div>
+      <p style="font-size:13px;color:var(--text-secondary);line-height:1.65;">Social presentation varies dramatically enough across contexts that context-independent identity becomes difficult to locate. This variance is a hallmark of effective masking: a socially acceptable surface constructed over a substantially different underlying experience. AuDHD (ADHD + autism comorbidity) is chronically underdiagnosed in women, who develop masking behaviours earlier, more completely, and at greater ongoing energy cost than male counterparts.</p>
     </div>
-  </section>
-
-  <!-- ENERGY LEDGER -->
-  <section class="section fade-in" id="energy">
-    <div class="section-header">
-      <span class="section-num">09</span>
-      <h2 class="section-title">Energy <em>Ledger</em></h2>
-      <div class="section-rule"></div>
+  </div>
+  <div class="card">
+    <div class="card-label">Mechanistic explanations</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1.25rem;">
+      <div><div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">The invisible interior</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.65;">A loud, complex inner world that external observers cannot access. Produced by ADHD parallel processing (self-absorbed in thought) compounded by autistic masking (deliberate suppression of internal experience for social compliance).</div></div>
+      <div><div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">Variable functioning</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.65;">Output quality fluctuates significantly with cycle phase, energy level, body confidence, and environment. This is a high-sensitivity system responding to inputs. The range between best and worst functioning is wider than in neurotypical profiles.</div></div>
+      <div><div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:6px;">The systems problem</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.65;">The subject creates systems, finds them compelling during construction, then abandons them. The ADHD novelty response interacts with the autistic systematising drive. The system is interesting while being built. Once complete, it no longer holds attention.</div></div>
     </div>
+  </div>
+</section>
 
-    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 620px; margin-bottom: 2rem;">What the day costs you, and what restores the balance. More granular than introvert / extrovert.</p>
+<!-- 04 TENSIONS -->
+<section class="section fade-in" id="tensions">
+  <div class="section-header"><span class="section-num">04</span><h2 class="section-title">Core <em>Tensions</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">Persistent structural contradictions. These do not resolve. They are managed, navigated, and occasionally collapsed under stress. The tensions are the subject's shape.</p>
+  <div class="card">
+    <div class="tension-item"><div class="tension-dot"></div><div class="tension-pole">Extraordinarily rich inner world</div><div class="tension-vs">↔</div><div class="tension-pole">Almost nobody has access to it</div></div>
+    <div class="tension-item"><div class="tension-dot"></div><div class="tension-pole">Genuine need for connection</div><div class="tension-vs">↔</div><div class="tension-pole">Intense aversion to being closely observed</div></div>
+    <div class="tension-item"><div class="tension-dot"></div><div class="tension-pole">Rule-breaking as genuine instinct</div><div class="tension-vs">↔</div><div class="tension-pole">Compliance under social observation (Saturn)</div></div>
+    <div class="tension-item"><div class="tension-dot"></div><div class="tension-pole">Multiple distinct operational identities</div><div class="tension-vs">↔</div><div class="tension-pole">No stable sense of which one is primary</div></div>
+    <div class="tension-item"><div class="tension-dot"></div><div class="tension-pole">High fluid intelligence; strong pattern recognition</div><div class="tension-vs">↔</div><div class="tension-pole">Chronic inability to sustain systems</div></div>
+    <div class="tension-item"><div class="tension-dot"></div><div class="tension-pole">Taurus Sun: craves stability and groundedness</div><div class="tension-vs">↔</div><div class="tension-pole">Gemini Rising: perpetually adapts, shifts, presents differently</div></div>
+    <div class="tension-item"><div class="tension-dot"></div><div class="tension-pole">Rage and non-compliance beneath (Lilith, Mars 12th)</div><div class="tension-vs">↔</div><div class="tension-pole">Compulsive harmony-seeking on surface (Libra Moon)</div></div>
+    <div class="tension-item" style="border-bottom:none;"><div class="tension-dot"></div><div class="tension-pole">Physical appearance as identity foundation</div><div class="tension-vs">↔</div><div class="tension-pole">Current dissatisfaction with physical self</div></div>
+  </div>
+</section>
 
+<!-- 05 STATES -->
+<section class="section fade-in" id="states">
+  <div class="section-header"><span class="section-num">05</span><h2 class="section-title">State <em>System</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">Named operating states. Cycle phase, energy, body confidence, and environment all influence which state is accessible. Identifying the current state increases navigational accuracy.</p>
+  <div class="grid-2" style="margin-bottom:1.25rem;">
+    <div class="state-card state-a">
+      <div class="state-name">Rio Mode</div>
+      <div class="state-weather">Clear · Full integration</div>
+      <div class="state-body">Maximum integration. Physical ease present. Environment is warm, aesthetically rich, non-judgmental. Social interaction produces rather than depletes energy. Intellectual and social capacities are simultaneously accessible. The Taurus Sun is fully expressed. The closest observable approximation to the unmasked self. Not a performance.</div>
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:12px;color:var(--text-tertiary);">Conditions: body confidence · dressed well · aligned company · warm, low-scrutiny environment</div>
+    </div>
+    <div class="state-card state-b">
+      <div class="state-name">Glass House</div>
+      <div class="state-weather">Overcast · Masking active</div>
+      <div class="state-body">Under sustained observation or in high-stakes social environments, the Gemini rising activates fully and the interior seals. External observers see a significantly reduced version: careful, surface-level, socially competent but inert. Saturn's restriction on self-assertion is in full effect. The "flat personality" diagnosis originates here. The interiority has not gone — it has sealed.</div>
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:12px;color:var(--text-tertiary);">Triggers: intense scrutiny · authority figures · high-judgment environments</div>
+    </div>
+    <div class="state-card state-c">
+      <div class="state-name">The Spiral</div>
+      <div class="state-weather">Electrical storm · Internal</div>
+      <div class="state-body">The hyperanalysis mechanism has activated and turned on the self. Thought volume increases. The multi-tab architecture processes the same problem across multiple channels simultaneously. Withdrawal from external contact is automatic, not chosen. The subject goes quiet. Duration varies from hours to days. External intervention rarely accelerates resolution. The system demands solitude to process load.</div>
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:12px;color:var(--text-tertiary);">Triggers: something goes wrong · rejection signal · body dissatisfaction · overstimulation</div>
+    </div>
+    <div class="state-card state-d">
+      <div class="state-name">Flow State</div>
+      <div class="state-weather">Still and charged</div>
+      <div class="state-body">All parallel processing converges on a single problem of sufficient complexity. The cognitive architecture — a liability in routine conditions — becomes an asset. Pattern recognition runs at full capacity. Cross-domain connection is rapid. Output quality reaches its ceiling. This state is rare, cannot be manufactured through effort or discipline, and depends entirely on intrinsic interest. It arrives.</div>
+      <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);font-size:12px;color:var(--text-tertiary);">Conditions: genuine intellectual engagement · no performance pressure · sufficient energy baseline</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-label">Cycle as state modifier</div>
+    <p style="font-size:14px;color:var(--text-secondary);line-height:1.7;">The subject identifies the menstrual cycle as a significant variable in state access and social functioning. Consistent with the high-sensitivity profile throughout. Systematic cycle tracking correlated with state logging would produce high-value predictive data. The observation log is the appropriate tool for this.</p>
+  </div>
+</section>
+
+<!-- 06 MASKS -->
+<section class="section fade-in" id="masks">
+  <div class="section-header"><span class="section-num">06</span><h2 class="section-title">Masks &amp; <em>Versions</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">The subject presents markedly differently across contexts. This is not deception — it is Gemini rising responding to environment. What remains constant across all versions is the most reliable indicator of core identity.</p>
+  <div class="grid-3" style="margin-bottom:1.5rem;">
+    <div class="card"><div style="font-family:'Cormorant Garamond',serif;font-size:18px;margin-bottom:8px;">With trusted others</div><div style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">The interior partially accessible. Curiosity, warmth, and intellectual engagement surface. This version generates "bon vivant" and "interesting" from observers. The closest to the unmasked self available in social contexts.</div><div style="font-size:11px;color:var(--text-tertiary);">Consistent: curiosity, warmth, the pattern-connecting</div></div>
+    <div class="card"><div style="font-family:'Cormorant Garamond',serif;font-size:18px;margin-bottom:8px;">With strangers</div><div style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">Gemini rising as primary interface. Observing, calibrating, producing the version most likely to fit the context. Interior does not surface. Reads as awkward or flat in low-confidence conditions; charming and fluid in high-confidence ones.</div><div style="font-size:11px;color:var(--text-tertiary);">Consistent: the observation, the reading of others</div></div>
+    <div class="card"><div style="font-family:'Cormorant Garamond',serif;font-size:18px;margin-bottom:8px;">Under scrutiny</div><div style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">Saturn in Aries in the 11th activates. Self-assertion suppressed. Social rules followed precisely. Interior entirely sealed. The gap between experienced self and presented self is at its maximum. The energy cost of maintaining this version is high.</div><div style="font-size:11px;color:var(--text-tertiary);">Consistent: the vigilance, the self-monitoring</div></div>
+    <div class="card"><div style="font-family:'Cormorant Garamond',serif;font-size:18px;margin-bottom:8px;">When intellectually sparked</div><div style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">ADHD brain has found sufficient stimulus. Social anxiety recedes. Pattern-connecting runs publicly. Often startling to those who know only the guarded version. The subject does not register the shift herself while it is occurring.</div><div style="font-size:11px;color:var(--text-tertiary);">Consistent: the intelligence, the aliveness</div></div>
+    <div class="card"><div style="font-family:'Cormorant Garamond',serif;font-size:18px;margin-bottom:8px;">Alone</div><div style="font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:1rem;">The truest operational state and the least observed. All tabs open. Music running. Thoughts multiplying across channels. No performance architecture active. The subject this atlas attempts to document.</div><div style="font-size:11px;color:var(--text-tertiary);">Consistent: everything</div></div>
+    <div class="card" style="border-style:dashed;border-color:var(--text-tertiary);opacity:0.6;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;margin-bottom:8px;color:var(--text-tertiary);">Add a version</div>
+      <div contenteditable="true" data-placeholder="Context or relationship type..." class="editable" style="min-height:60px;margin-bottom:8px;"></div>
+      <div contenteditable="true" data-placeholder="What is consistent here?" class="editable" style="font-size:12px;"></div>
+    </div>
+  </div>
+  <div class="atlas-quote">The version that appears to no one — alone, tabs open, music running — has never been edited for an audience. It is the most primary data available.</div>
+</section>
+
+<!-- 07 PEAK -->
+<section class="section fade-in" id="peak">
+  <div class="section-header"><span class="section-num">07</span><h2 class="section-title">Peak <em>Conditions</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">Environmental and internal conditions under which the subject reaches maximum integration and functional capacity. Observational findings, not aspirational targets.</p>
+  <div class="grid-2">
     <div class="card">
-      <div class="ledger-row">
-        <div>
-          <div class="ledger-col-head drain-head">Drains</div>
-          <div class="ledger-item"><div class="ledger-dot dot-drain"></div><div>Being the centre of attention for sustained periods</div></div>
-          <div class="ledger-item"><div class="ledger-dot dot-drain"></div><div>Hard scrutiny — someone paying too close attention to you</div></div>
-          <div class="ledger-item"><div class="ledger-dot dot-drain"></div><div>Environments that feel judgmental or performance-oriented</div></div>
-          <div class="ledger-item"><div class="ledger-dot dot-drain"></div><div>People who don't match your wavelength (forced socialising)</div></div>
-          <div class="ledger-item"><div class="ledger-dot dot-drain"></div><div>Body dissatisfaction as a persistent background state</div></div>
-          <div class="ledger-item" contenteditable="true" data-placeholder="Add something that drains you..." style="color:var(--text-tertiary); font-style:italic; font-size:14px; padding: 8px 0; outline:none; border-radius:4px;">Add something that drains you...</div>
-        </div>
-        <div style="border-left: 1px solid var(--border); padding-left: 1.25rem;">
-          <div class="ledger-col-head charge-head">Restores</div>
-          <div class="ledger-item"><div class="ledger-dot dot-charge"></div><div>Genuine intellectual engagement — a problem worth solving</div></div>
-          <div class="ledger-item"><div class="ledger-dot dot-charge"></div><div>One or two people who actually know you</div></div>
-          <div class="ledger-item"><div class="ledger-dot dot-charge"></div><div>Physical environments that feel beautiful and warm</div></div>
-          <div class="ledger-item"><div class="ledger-dot dot-charge"></div><div>Alone time with no performance required</div></div>
-          <div class="ledger-item"><div class="ledger-dot dot-charge"></div><div>Feeling good in your body / your clothes</div></div>
-          <div class="ledger-item" contenteditable="true" data-placeholder="Add something that restores you..." style="color:var(--text-tertiary); font-style:italic; font-size:14px; padding: 8px 0; outline:none; border-radius:4px;">Add something that restores you...</div>
-        </div>
-      </div>
+      <div class="card-label">Confirmed conditions</div>
+      <div style="padding:1rem 0;border-bottom:1px solid var(--border);"><div style="font-size:14px;font-weight:600;margin-bottom:4px;">Physical ease in the body</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.65;">For the Taurus Sun, physical ease is structurally prerequisite, not cosmetic preference. When the body is functioning and the subject is comfortable in it, the rest of the architecture becomes accessible. When it is not, access narrows across all domains.</div></div>
+      <div style="padding:1rem 0;border-bottom:1px solid var(--border);"><div style="font-size:14px;font-weight:600;margin-bottom:4px;">Aligned company</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.65;">Intellectual or temperamental resonance, not merely pleasant company. Misaligned company at high energy cost. One or two aligned individuals outperform any group of many misaligned ones.</div></div>
+      <div style="padding:1rem 0;border-bottom:1px solid var(--border);"><div style="font-size:14px;font-weight:600;margin-bottom:4px;">Soft rather than hard attention</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.65;">Engagement without fixed scrutiny. The subject wants to be heard and to have impact. She does not want to be studied as an object. The distinction is precise and the system registers it accurately.</div></div>
+      <div style="padding:1rem 0;"><div style="font-size:14px;font-weight:600;margin-bottom:4px;">The Rio environment</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.65;">A physical and cultural environment that is warm, sensory-rich, aesthetically present, and low-judgment. Rio functions as an external reference point for the optimal internal state. The conditions sought in any context are a version of what Rio reliably provides.</div></div>
     </div>
-  </section>
-
-  <!-- ORIGINS & WOUNDS -->
-  <section class="section fade-in" id="wounds">
-    <div class="section-header">
-      <span class="section-num">10</span>
-      <h2 class="section-title">Origins &amp; <em>Wounds</em></h2>
-      <div class="section-rule"></div>
-    </div>
-
-    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 620px; margin-bottom: 2rem;">Not wallowing — archaeology. Why do certain traits exist? Tracing them back turns description into understanding. This section grows slowly and with honesty.</p>
-
-    <div class="wound-item">
-      <div class="wound-label">Hypothesis</div>
-      <div class="wound-title">The Invisible Interior</div>
-      <div class="wound-body">Almost nobody knows what's actually happening inside you. This could be innate (neurodivergent wiring that makes masking automatic), or it could also be learned — an environment where showing the interior felt unsafe or unwelcome, so you stopped. Worth exploring: was there a person, or a period, where being seen felt dangerous?</div>
-    </div>
-
-    <div class="wound-item">
-      <div class="wound-label">Hypothesis</div>
-      <div class="wound-title">Body as Conditional Self-Worth</div>
-      <div class="wound-body">When physical appearance is an anchor for identity, something installed that connection early. Taurus sun explains some of it — the body genuinely matters to this placement. But the conditionality ("I am only at my best when...") suggests a wound too. What messages did you receive about your body, and from whom?</div>
-    </div>
-
-    <div class="wound-item">
-      <div class="wound-label">Hypothesis</div>
-      <div class="wound-title">Rule-Following Under Scrutiny</div>
-      <div class="wound-body">You hate rules by instinct — but follow them when being watched. This gap between private self and public compliance suggests the cost of breaking rules was at some point high enough to install an anxiety response. Social anxiety as a learned adaptation rather than a fixed trait.</div>
-    </div>
-
-    <div class="wound-item" style="border-left-color: var(--text-tertiary); opacity: 0.6;">
-      <div class="wound-label" style="color: var(--text-tertiary);">Add your own</div>
-      <div class="wound-title" contenteditable="true" data-placeholder="Name the wound or pattern..." class="editable"></div>
-      <div class="wound-body" contenteditable="true" data-placeholder="What do you think its origin might be? What does it connect to?" class="editable"></div>
-    </div>
-  </section>
-
-  <!-- THE SHADOW -->
-  <section class="section fade-in" id="shadow">
-    <div class="section-header">
-      <span class="section-num">11</span>
-      <h2 class="section-title">The <em>Shadow</em></h2>
-      <div class="section-rule"></div>
-    </div>
-
-    <p class="shadow-intro">The parts of yourself you suppress, disown, or haven't acknowledged yet. Jung called this the shadow — not the evil self, but the unintegrated self. What you most judge in others is often a clue to what you haven't accepted in yourself. This section demands the most honesty and grows the most slowly.</p>
-
-    <div class="card" style="border-color: rgba(196,74,74,0.2);">
-      <div class="card-label" style="color: var(--rose);">Shadow prompts — for reflection</div>
-      <div style="display: grid; gap: 1rem; margin-top: 0.5rem;">
-        <div style="padding: 1rem; background: rgba(184,112,112,0.05); border-radius: 6px; border: 1px solid rgba(184,112,112,0.15);">
-          <div style="font-size: 12px; color: var(--rose); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;">Prompt 1</div>
-          <div style="font-size: 15px; font-style: italic; color: var(--text-secondary);">What quality do you most dislike in other people? It probably lives in you too, in a form you haven't admitted.</div>
-        </div>
-        <div style="padding: 1rem; background: rgba(184,112,112,0.05); border-radius: 6px; border: 1px solid rgba(184,112,112,0.15);">
-          <div style="font-size: 12px; color: var(--rose); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;">Prompt 2</div>
-          <div style="font-size: 15px; font-style: italic; color: var(--text-secondary);">What do you secretly want that you'd be embarrassed to admit? Not in terms of desires — in terms of who you want to be.</div>
-        </div>
-        <div style="padding: 1rem; background: rgba(184,112,112,0.05); border-radius: 6px; border: 1px solid rgba(184,112,112,0.15);">
-          <div style="font-size: 12px; color: var(--rose); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px;">Prompt 3</div>
-          <div style="font-size: 15px; font-style: italic; color: var(--text-secondary);">What version of yourself are you most afraid other people will see?</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="margin-top: 1.25rem; padding: 1.5rem; border: 1px dashed rgba(237,228,212,0.12); border-radius: 8px;">
-      <p style="font-size: 14px; color: var(--text-tertiary); font-style: italic; text-align: center;">This section is intentionally left for you to fill. Use the Insight Inbox below, or write directly here.</p>
-      <div contenteditable="true" data-placeholder="Begin here when ready..." class="editable" style="margin-top: 1rem; min-height: 80px; font-size: 15px; line-height: 1.75; color: var(--text-secondary);"></div>
-    </div>
-  </section>
-
-  <!-- THE UNKNOWN -->
-  <section class="section fade-in" id="unknown">
-    <div class="section-header">
-      <span class="section-num">12</span>
-      <h2 class="section-title">The <em>Unknown</em></h2>
-      <div class="section-rule"></div>
-    </div>
-
-    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 620px; margin-bottom: 2rem;">Open questions about yourself. This section never fully empties — it just evolves. The questions you can't answer yet are often more revealing than the ones you can.</p>
-
     <div class="card">
-      <div class="unknown-item">
-        <div class="unknown-num">I.</div>
-        <div class="unknown-q">Which of my many versions is closest to the actual me — or is the multiplicity itself the answer?</div>
+      <div class="card-label">Add observations</div>
+      <p style="font-size:13px;color:var(--text-tertiary);margin-bottom:1rem;font-style:italic;">Click to edit. What else produces maximum integration?</p>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);"><span style="color:var(--accent);font-size:16px;flex-shrink:0;">◈</span><div contenteditable="true" data-placeholder="Condition observed..." class="editable" style="flex:1;"></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border);"><span style="color:var(--accent);font-size:16px;flex-shrink:0;">◈</span><div contenteditable="true" data-placeholder="Condition observed..." class="editable" style="flex:1;"></div></div>
+      <div style="display:flex;gap:10px;align-items:flex-start;padding:12px 0;"><span style="color:var(--accent);font-size:16px;flex-shrink:0;">◈</span><div contenteditable="true" data-placeholder="Condition observed..." class="editable" style="flex:1;"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 TRIGGERS -->
+<section class="section fade-in" id="triggers">
+  <div class="section-header"><span class="section-num">08</span><h2 class="section-title">Trigger <em>Map</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">Documented stimulus-response patterns. Add entries as observed. Precision over time produces a usable diagnostic tool.</p>
+  <div class="card">
+    <table class="trigger-table">
+      <thead><tr><th style="width:24%;">Stimulus</th><th style="width:16%;">Response</th><th style="width:34%;">Mechanism</th><th>What helps</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--text-primary);">Sustained, intense scrutiny</td><td><span class="response-badge r-mask">Masking</span></td><td>Gemini rising activates. Interior seals. Saturn suppresses self-assertion. Observable self becomes reduced and compliant.</td><td>Softening the attention. Small agreements and additions rather than focused observation of the subject as object.</td></tr>
+        <tr><td style="color:var(--text-primary);">Something goes wrong</td><td><span class="response-badge r-withdraw">Withdraw</span></td><td>Libra Moon avoids disharmony. Mars in the 12th turns the impulse inward. The subject disappears rather than engages. Processing is internal and lengthy.</td><td>Space without pressure to explain or resolve. Contact on the subject's terms when ready.</td></tr>
+        <tr><td style="color:var(--text-primary);">Body dissatisfaction</td><td><span class="response-badge r-spiral">Spiral</span></td><td>Taurus Sun requires physical ease as structural prerequisite. When disrupted, access to social, intellectual, and emotional capacities narrows significantly across the board.</td><td>Movement that restores ease rather than punishes. Aesthetic anchors regardless. Environments that do not compound the dissatisfaction.</td></tr>
+        <tr><td style="color:var(--text-primary);">Perceived rejection or dismissal</td><td><span class="response-badge r-spiral">Spiral</span></td><td>Libra Moon reads social signal loss acutely. Hyperanalysis activates and runs the event repeatedly across all processing channels. Aries Venus adds a sharper, more immediate wound.</td><td>Distinction between perception of rejection and confirmed rejection. Not easily made in the spiral. Time is the primary mechanism.</td></tr>
+        <tr><td style="color:var(--text-primary);">Intellectual match or provocation</td><td><span class="response-badge r-activate">Activate</span></td><td>ADHD brain engages at full capacity. Social anxiety is bypassed. Interior becomes partially accessible. One of the few consistent triggers for Flow State.</td><td>This is a resource. Identify and deliberately seek contexts where this activation is likely.</td></tr>
+        <tr><td contenteditable="true" data-placeholder="Add stimulus..." style="color:var(--text-tertiary);font-style:italic;font-size:13px;outline:none;">Add stimulus...</td><td contenteditable="true" data-placeholder="Response..." style="color:var(--text-tertiary);font-style:italic;font-size:13px;outline:none;">Response...</td><td contenteditable="true" data-placeholder="Mechanism..." style="color:var(--text-tertiary);font-style:italic;font-size:13px;outline:none;">Mechanism...</td><td contenteditable="true" data-placeholder="What helps..." style="color:var(--text-tertiary);font-style:italic;font-size:13px;outline:none;">What helps...</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 09 ENERGY -->
+<section class="section fade-in" id="energy">
+  <div class="section-header"><span class="section-num">09</span><h2 class="section-title">Energy <em>Ledger</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">A granular accounting of what the subject's system costs and what restores it. More precise than the introvert/extrovert binary.</p>
+  <div class="card">
+    <div class="ledger-row">
+      <div>
+        <div class="ledger-col-head" style="color:var(--rose);">Costs energy</div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--rose);"></div><div>Sustained time as the focal point of a group's attention</div></div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--rose);"></div><div>Intense, fixed scrutiny directed at the subject</div></div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--rose);"></div><div>High-judgment or status-competitive environments</div></div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--rose);"></div><div>Company requiring continuous performance with no reciprocal exchange</div></div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--rose);"></div><div>Body dissatisfaction as a persistent background state</div></div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--rose);"></div><div>Forcing output when the ADHD brain has not engaged intrinsically</div></div>
+        <div contenteditable="true" data-placeholder="Add a drain..." style="color:var(--text-tertiary);font-style:italic;font-size:13px;outline:none;padding:6px 0;">Add a drain...</div>
       </div>
-      <div class="unknown-item">
-        <div class="unknown-num">II.</div>
-        <div class="unknown-q">How much of my inner world is inaccessible to others by choice, and how much by habit I've never examined?</div>
-      </div>
-      <div class="unknown-item">
-        <div class="unknown-num">III.</div>
-        <div class="unknown-q">What would I be like — how would I operate — if the social anxiety were genuinely gone?</div>
-      </div>
-      <div class="unknown-item">
-        <div class="unknown-num">IV.</div>
-        <div class="unknown-q">Is the body-confidence dependency something I can restructure, or is it genuinely foundational to a Taurus sun?</div>
-      </div>
-      <div class="unknown-item">
-        <div class="unknown-num">V.</div>
-        <div class="unknown-q">What does the version of me that doesn't mask actually sound like in conversation?</div>
-      </div>
-      <div class="unknown-item" style="border-bottom:none;">
-        <div class="unknown-num" style="color: var(--text-tertiary);">+</div>
-        <div contenteditable="true" data-placeholder="Add an open question about yourself..." class="editable" style="font-size: 16px; font-style: italic; font-family: 'Cormorant Garamond', serif; color: var(--text-secondary); min-height: 28px;"></div>
+      <div style="border-left:1px solid var(--border);padding-left:1.25rem;">
+        <div class="ledger-col-head" style="color:var(--teal);">Restores energy</div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--teal);"></div><div>Genuine intellectual engagement — a problem worth solving</div></div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--teal);"></div><div>One or two people with access to the actual interior</div></div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--teal);"></div><div>Environments that are warm, beautiful, aesthetically rich</div></div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--teal);"></div><div>Unstructured solitude — no performance required</div></div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--teal);"></div><div>Physical ease in the body; movement that feels good</div></div>
+        <div class="ledger-item"><div class="ledger-dot" style="background:var(--teal);"></div><div>The Rio conditions: warmth, sensory richness, absence of judgment</div></div>
+        <div contenteditable="true" data-placeholder="Add a charge..." style="color:var(--text-tertiary);font-style:italic;font-size:13px;outline:none;padding:6px 0;">Add a charge...</div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- INSIGHT INBOX -->
-  <section class="section fade-in" id="inbox">
-    <div class="section-header">
-      <span class="section-num">∞</span>
-      <h2 class="section-title">Insight <em>Inbox</em></h2>
-      <div class="section-rule"></div>
-    </div>
+<!-- 10 WOUNDS -->
+<section class="section fade-in" id="wounds">
+  <div class="section-header"><span class="section-num">10</span><h2 class="section-title">Origins &amp; <em>Wounds</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">Aetiological hypotheses — probable origins of observed patterns. Working theories, not conclusions. They sharpen with data and honest return.</p>
+  <div class="wound-item">
+    <div class="wound-label">Hypothesis</div>
+    <div class="wound-title">The sealed interior</div>
+    <div class="wound-body">The subject's inner world is almost entirely invisible to others. This is partly structural: 12th house Sun and Mars; Moon in the 4th; AuDHD masking architecture. It is also likely learned. Environments in which showing the interior was met with dismissal, ridicule, or unsafety produce rapid and lasting sealing behaviour. The question: was there a specific context or period in which being fully seen produced a negative outcome significant enough to generalise into a permanent operating policy?</div>
+  </div>
+  <div class="wound-item">
+    <div class="wound-label">Hypothesis</div>
+    <div class="wound-title">Body as conditional access</div>
+    <div class="wound-body">Physical appearance as a structural precondition for self-worth carries a learned component beyond Taurus Sun. The Sun explains the body's centrality. It does not fully explain the conditionality. Messages received about the body — from whom, and at what developmental stage — likely installed the equation: physical acceptability equals functional access to self. This is worth tracing with precision.</div>
+  </div>
+  <div class="wound-item">
+    <div class="wound-label">Hypothesis · Saturn</div>
+    <div class="wound-title">Learned self-suppression under observation</div>
+    <div class="wound-body">Saturn in Aries in the 11th describes structural restriction on self-assertion in social contexts. This may have been compounded by early experiences in which assertion — particularly in groups — produced punishment or social cost significant enough to install an anxiety response. The result is the gap between the private rule-breaker and the publicly compliant person. The energy cost of that gap is substantial, chronic, and largely invisible to external observers.</div>
+  </div>
+  <div class="wound-item" style="border-left-color:var(--text-tertiary);opacity:0.65;">
+    <div class="wound-label" style="color:var(--text-tertiary);">Add an entry</div>
+    <div class="wound-title" contenteditable="true" data-placeholder="Name the pattern..." class="editable"></div>
+    <div class="wound-body" contenteditable="true" data-placeholder="What is its probable origin? What does it connect to in the wider profile?" class="editable"></div>
+  </div>
+</section>
 
-    <p style="font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 620px; margin-bottom: 2rem;">A frictionless place for realisations, observations, and raw thoughts about yourself. Timestamped. Persistent. The archaeological record of your self-understanding evolving in real time.</p>
-
-    <div class="insight-input-area">
-      <textarea class="insight-textarea" id="insight-input" rows="3" placeholder="A realisation, a pattern you noticed, something that surprised you about yourself today..."></textarea>
-      <div class="insight-actions">
-        <span class="insight-hint" id="insight-char-count">Press Cmd+Enter to save</span>
-        <button class="btn" onclick="saveInsight()">Record insight</button>
+<!-- 11 SHADOW -->
+<section class="section fade-in" id="shadow">
+  <div class="section-header"><span class="section-num">11</span><h2 class="section-title">The <em>Shadow</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:16px;color:var(--text-secondary);line-height:1.75;max-width:640px;margin-bottom:2rem;font-style:italic;">The unintegrated self. What is most fiercely judged in others is usually most firmly denied in the self. This section cannot be completed quickly. It requires repeated return and a tolerance for discomfort.</p>
+  <div class="card" style="border-color:rgba(196,74,74,0.2);margin-bottom:1.25rem;">
+    <div class="card-label" style="color:var(--rose);">Structural shadow candidates · Derived from chart and profile</div>
+    <div style="display:grid;gap:1rem;margin-top:0.5rem;">
+      <div style="padding:1rem;background:rgba(184,112,112,0.05);border-radius:6px;border:1px solid rgba(184,112,112,0.15);">
+        <div style="font-size:12px;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">The suppressed Mars</div>
+        <div style="font-size:14px;color:var(--text-secondary);line-height:1.65;">Mars in the 12th is drive turned inward. The subject's assertive and aggressive capacity is substantial — and consistently swallowed. The anger Lilith in Libra describes, the rage beneath the harmony-seeking, connects here. Shadow manifestations of suppressed Mars: not knowing what she actually wants; difficulty with direct conflict; aggression surfacing indirectly or turned against the self; chronic understatement of her own needs.</div>
+      </div>
+      <div style="padding:1rem;background:rgba(184,112,112,0.05);border-radius:6px;border:1px solid rgba(184,112,112,0.15);">
+        <div style="font-size:12px;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">The desire to be fully seen</div>
+        <div style="font-size:14px;color:var(--text-secondary);line-height:1.65;">The subject states she dislikes being perceived. The Aries Venus says something different: it wants to be desired, seen as attractive, acknowledged. These two statements coexist. The shadow candidate is the part that wants deep, sustained recognition — and has constructed an elaborate architecture of aversion around that want to protect itself from the vulnerability of admitting it.</div>
+      </div>
+      <div style="padding:1rem;background:rgba(184,112,112,0.05);border-radius:6px;border:1px solid rgba(184,112,112,0.15);">
+        <div style="font-size:12px;color:var(--rose);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Prompts for own investigation</div>
+        <div style="font-size:14px;color:var(--text-secondary);line-height:1.65;font-style:italic;">What quality in others produces the sharpest judgment? · What does she want that she would be embarrassed to admit? · What version of herself is she most afraid someone will accurately describe to her face?</div>
       </div>
     </div>
+  </div>
+  <div style="padding:1.5rem;border:1px dashed rgba(237,228,212,0.1);border-radius:8px;">
+    <p style="font-size:13px;color:var(--text-tertiary);font-style:italic;text-align:center;margin-bottom:1rem;">This section belongs to the subject. Enter when ready.</p>
+    <div contenteditable="true" data-placeholder="Begin here..." class="editable" style="min-height:80px;font-size:15px;line-height:1.75;color:var(--text-secondary);"></div>
+  </div>
+</section>
 
-    <div id="insights-container"></div>
+<!-- 12 UNKNOWN -->
+<section class="section fade-in" id="unknown">
+  <div class="section-header"><span class="section-num">12</span><h2 class="section-title">The <em>Unknown</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">Open research questions. This section does not empty. Answers generate new unknowns. The questions evolve with the study.</p>
+  <div class="card">
+    <div class="unknown-item"><div class="unknown-num">I.</div><div class="unknown-q">Which of the multiple versions is closest to the actual self — or is the multiplicity itself the most accurate answer?</div></div>
+    <div class="unknown-item"><div class="unknown-num">II.</div><div class="unknown-q">How much of the sealed interior is structural (12th house, AuDHD masking) and how much is learned — and therefore, potentially, reversible?</div></div>
+    <div class="unknown-item"><div class="unknown-num">III.</div><div class="unknown-q">What would functioning look like if the social anxiety produced by Saturn in the 11th were significantly reduced — through intervention, environment, or habituation?</div></div>
+    <div class="unknown-item"><div class="unknown-num">IV.</div><div class="unknown-q">What does the suppressed Mars in the 12th actually want, if fully expressed and unconstrained by Saturn, the Libra Moon, and the masking architecture?</div></div>
+    <div class="unknown-item"><div class="unknown-num">V.</div><div class="unknown-q">The North Node in Virgo in the 3rd house describes the direction of this lifetime. What is the precise form — the specific domain — where this subject's analytical and communicative capacity belongs?</div></div>
+    <div class="unknown-item"><div class="unknown-num">VI.</div><div class="unknown-q">Is the body-confidence dependency structural (Taurus Sun, Venus in Aries) or conditional (learned)? If the latter: what would it take to decouple self-worth from physical state?</div></div>
+    <div class="unknown-item" style="border-bottom:none;"><div class="unknown-num" style="color:var(--text-tertiary);">+</div><div contenteditable="true" data-placeholder="Add an open question..." class="editable" style="font-size:16px;font-style:italic;font-family:'Cormorant Garamond',serif;min-height:28px;"></div></div>
+  </div>
+</section>
 
-    <div id="empty-state" style="text-align:center; padding: 3rem; color: var(--text-tertiary); font-size: 15px; font-style: italic;">
-      No insights yet. The first one is always the hardest.
-    </div>
-  </section>
+<!-- LOG -->
+<section class="section fade-in" id="inbox">
+  <div class="section-header"><span class="section-num">∞</span><h2 class="section-title">Observation <em>Log</em></h2><div class="section-rule"></div></div>
+  <p style="font-size:15px;color:var(--text-tertiary);line-height:1.7;max-width:640px;margin-bottom:2rem;font-style:italic;">A continuous, timestamped record of observations, realisations, and data points. Raw entries. No editing for presentation. Over time this becomes the primary source material for updating the atlas.</p>
+  <div class="insight-input-area">
+    <textarea class="insight-textarea" id="insight-input" rows="3" placeholder="Log an observation. State, trigger, pattern noticed, realisation, cycle note — anything with data value..."></textarea>
+    <div class="insight-actions"><span class="insight-hint">Cmd+Enter to log</span><button class="btn" onclick="saveInsight()">Log observation</button></div>
+  </div>
+  <div id="insights-container"></div>
+  <div id="empty-state" style="text-align:center;padding:3rem;color:var(--text-tertiary);font-size:15px;font-style:italic;">No observations logged yet.</div>
+</section>
 
-  <!-- FOOTER -->
-  <footer style="padding: 4rem 5rem; border-top: 1px solid var(--border); display:flex; justify-content:space-between; align-items:center;">
-    <div>
-      <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--accent); margin-bottom: 4px;">The Inner Atlas</div>
-      <div style="font-size: 13px; color: var(--text-tertiary);">A private cartography. For your eyes only.</div>
-    </div>
-    <div style="text-align:right; font-size: 12px; color: var(--text-tertiary); line-height:1.8;">
-      <div>Terra incognita remains vast.</div>
-      <div>Keep mapping.</div>
-    </div>
-  </footer>
+<footer style="padding:4rem 5rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+  <div><div style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--accent);margin-bottom:4px;">The Inner Atlas</div><div style="font-size:13px;color:var(--text-tertiary);">A case study in progress. Subject: self.</div></div>
+  <div style="text-align:right;font-size:12px;color:var(--text-tertiary);line-height:1.8;"><div>The territory is larger than the map.</div><div>Keep mapping.</div></div>
+</footer>
 
 </main>
-
 <script>
-  // Last updated
-  document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'});
-
-  // Insight Inbox
-  function getInsights() {
-    try { return JSON.parse(localStorage.getItem('inner-atlas-insights') || '[]'); } catch(e) { return []; }
+  document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+  function getInsights(){try{return JSON.parse(localStorage.getItem('inner-atlas-insights')||'[]');}catch(e){return[];}}
+  function saveInsights(a){localStorage.setItem('inner-atlas-insights',JSON.stringify(a));}
+  function renderInsights(){
+    const ins=getInsights(),c=document.getElementById('insights-container'),e=document.getElementById('empty-state');
+    document.getElementById('insight-count').textContent=ins.length;
+    if(!ins.length){e.style.display='block';c.innerHTML='';return;}
+    e.style.display='none';
+    c.innerHTML=ins.slice().reverse().map((x,i)=>`<div class="insight-entry"><div class="insight-date">${x.date}</div><div class="insight-text">${x.text.replace(/\n/g,'<br>')}</div><button class="insight-delete" onclick="deleteInsight(${ins.length-1-i})">×</button></div>`).join('');
   }
-
-  function saveInsights(insights) {
-    localStorage.setItem('inner-atlas-insights', JSON.stringify(insights));
+  function saveInsight(){
+    const inp=document.getElementById('insight-input'),t=inp.value.trim();
+    if(!t)return;
+    const a=getInsights();
+    a.push({text:t,date:new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'})});
+    saveInsights(a);inp.value='';renderInsights();
+    const ar=inp.closest('.insight-input-area');ar.style.borderColor='var(--accent)';setTimeout(()=>ar.style.borderColor='',700);
   }
-
-  function renderInsights() {
-    const insights = getInsights();
-    const container = document.getElementById('insights-container');
-    const empty = document.getElementById('empty-state');
-    const counter = document.getElementById('insight-count');
-
-    counter.textContent = insights.length;
-
-    if (insights.length === 0) {
-      empty.style.display = 'block';
-      container.innerHTML = '';
-      return;
-    }
-
-    empty.style.display = 'none';
-    container.innerHTML = insights.slice().reverse().map((ins, i) => `
-      <div class="insight-entry">
-        <div class="insight-date">${ins.date}</div>
-        <div class="insight-text">${ins.text.replace(/\n/g, '<br>')}</div>
-        <button class="insight-delete" onclick="deleteInsight(${insights.length - 1 - i})" title="Delete">×</button>
-      </div>
-    `).join('');
-  }
-
-  function saveInsight() {
-    const input = document.getElementById('insight-input');
-    const text = input.value.trim();
-    if (!text) return;
-
-    const insights = getInsights();
-    insights.push({
-      text,
-      date: new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
-    });
-    saveInsights(insights);
-    input.value = '';
-    renderInsights();
-
-    // Subtle flash
-    const area = input.closest('.insight-input-area');
-    area.style.borderColor = 'var(--accent)';
-    setTimeout(() => area.style.borderColor = '', 600);
-  }
-
-  function deleteInsight(index) {
-    const insights = getInsights();
-    insights.splice(index, 1);
-    saveInsights(insights);
-    renderInsights();
-  }
-
-  // Keyboard shortcut
-  document.getElementById('insight-input').addEventListener('keydown', function(e) {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') saveInsight();
-  });
-
+  function deleteInsight(i){const a=getInsights();a.splice(i,1);saveInsights(a);renderInsights();}
+  document.getElementById('insight-input').addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key==='Enter')saveInsight();});
   renderInsights();
-
-  // Scroll spy
-  const sections = document.querySelectorAll('.section, .hero');
-  const navLinks = document.querySelectorAll('.nav-link');
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        navLinks.forEach(l => l.classList.remove('active'));
-        const id = entry.target.id;
-        const active = document.querySelector(`.nav-link[href="#${id}"]`);
-        if (active) active.classList.add('active');
-      }
-    });
-  }, { threshold: 0.3 });
-
-  sections.forEach(s => observer.observe(s));
-
-  // Fade in on scroll
-  const fadeEls = document.querySelectorAll('.fade-in');
-  const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        fadeObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-
-  fadeEls.forEach(el => fadeObserver.observe(el));
+  const nl=document.querySelectorAll('.nav-link'),ss=document.querySelectorAll('section[id]');
+  const sObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){nl.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.nav-link[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{threshold:0.25});
+  ss.forEach(s=>sObs.observe(s));
+  const fObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08});
+  document.querySelectorAll('.fade-in').forEach(el=>fObs.observe(el));
 </script>
 </body>
 </html>
